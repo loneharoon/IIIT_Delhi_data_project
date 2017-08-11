@@ -1,0 +1,766 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.1.3)  4 AUG 2017 15:54
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**IIITD_eAnalysis.tex
+(./IIITD_eAnalysis.tex
+LaTeX2e <2014/05/01>
+Babel <3.9k> and hyphenation patterns for 78 languages loaded.
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2010/09/12 v5.6 Page Geometry
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count87
+\Gm@cntv=\count88
+\c@Gm@tempcnt=\count89
+\Gm@bindingoffset=\dimen103
+\Gm@wd@mp=\dimen104
+\Gm@odd@mp=\dimen105
+\Gm@even@mp=\dimen106
+\Gm@layoutwidth=\dimen107
+\Gm@layoutheight=\dimen108
+\Gm@layouthoffset=\dimen109
+\Gm@layoutvoffset=\dimen110
+\Gm@dimlist=\toks15
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count90
+))
+\Gin@req@height=\dimen111
+\Gin@req@width=\dimen112
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks16
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(./IIITD_eAnalysis.aux)
+\openout1 = `IIITD_eAnalysis.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(92.14519pt, 430.00462pt, 92.14519pt)
+* v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=430.00462pt
+* \textheight=556.47656pt
+* \oddsidemargin=19.8752pt
+* \evensidemargin=19.8752pt
+* \topmargin=-13.87262pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=11.0pt
+* \footskip=30.0pt
+* \marginparwidth=59.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count91
+\scratchdimen=\dimen113
+\scratchbox=\box26
+\nofMPsegments=\count92
+\nofMParguments=\count93
+\everyMPshowfont=\toks17
+\MPscratchCnt=\count94
+\MPscratchDim=\dimen114
+\MPnumerator=\count95
+\makeMPintoPDFobject=\count96
+\everyMPtoPDFconversion=\toks18
+) (/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Font Info:    Try loading font information for U+msa on input line 14.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 14.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+<figures/boys_hostel.pdf, id=1, 426.59375pt x 568.1225pt>
+File: figures/boys_hostel.pdf Graphic file (type pdf)
+
+<use figures/boys_hostel.pdf>
+Package pdftex.def Info: figures/boys_hostel.pdf used on input line 20.
+(pdftex.def)             Requested size: 427.33475pt x 569.10933pt.
+
+
+LaTeX Warning: Float too large for page by 38.36194pt on input line 22.
+
+<figures/boys_hostel_year2013.pdf, id=2, 426.59375pt x 568.1225pt>
+File: figures/boys_hostel_year2013.pdf Graphic file (type pdf)
+
+<use figures/boys_hostel_year2013.pdf>
+Package pdftex.def Info: figures/boys_hostel_year2013.pdf used on input line 24
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 26.
+
+<figures/boys_hostel_year2014.pdf, id=3, 426.59375pt x 568.1225pt>
+File: figures/boys_hostel_year2014.pdf Graphic file (type pdf)
+
+<use figures/boys_hostel_year2014.pdf>
+Package pdftex.def Info: figures/boys_hostel_year2014.pdf used on input line 28
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 30.
+
+<figures/boys_hostel_year2015.pdf, id=4, 426.59375pt x 568.1225pt>
+File: figures/boys_hostel_year2015.pdf Graphic file (type pdf)
+
+<use figures/boys_hostel_year2015.pdf>
+Package pdftex.def Info: figures/boys_hostel_year2015.pdf used on input line 32
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 34.
+
+<figures/boys_hostel_year2016.pdf, id=5, 426.59375pt x 568.1225pt>
+File: figures/boys_hostel_year2016.pdf Graphic file (type pdf)
+
+<use figures/boys_hostel_year2016.pdf>
+Package pdftex.def Info: figures/boys_hostel_year2016.pdf used on input line 36
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 38.
+
+<figures/boys_hostel_year2017.pdf, id=6, 426.59375pt x 568.1225pt>
+File: figures/boys_hostel_year2017.pdf Graphic file (type pdf)
+
+<use figures/boys_hostel_year2017.pdf>
+Package pdftex.def Info: figures/boys_hostel_year2017.pdf used on input line 40
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 42.
+
+<figures/girls_hostel.pdf, id=7, 426.59375pt x 568.1225pt>
+File: figures/girls_hostel.pdf Graphic file (type pdf)
+
+<use figures/girls_hostel.pdf>
+Package pdftex.def Info: figures/girls_hostel.pdf used on input line 45.
+(pdftex.def)             Requested size: 427.33475pt x 569.10933pt.
+
+
+LaTeX Warning: Float too large for page by 38.36194pt on input line 47.
+
+<figures/girls_hostel_year2013.pdf, id=8, 426.59375pt x 568.1225pt>
+File: figures/girls_hostel_year2013.pdf Graphic file (type pdf)
+
+<use figures/girls_hostel_year2013.pdf>
+Package pdftex.def Info: figures/girls_hostel_year2013.pdf used on input line 4
+9.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 51.
+
+<figures/girls_hostel_year2014.pdf, id=9, 426.59375pt x 568.1225pt>
+File: figures/girls_hostel_year2014.pdf Graphic file (type pdf)
+
+<use figures/girls_hostel_year2014.pdf>
+Package pdftex.def Info: figures/girls_hostel_year2014.pdf used on input line 5
+3.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 55.
+
+<figures/girls_hostel_year2015.pdf, id=10, 426.59375pt x 568.1225pt>
+File: figures/girls_hostel_year2015.pdf Graphic file (type pdf)
+
+<use figures/girls_hostel_year2015.pdf>
+Package pdftex.def Info: figures/girls_hostel_year2015.pdf used on input line 5
+7.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 59.
+
+<figures/girls_hostel_year2016.pdf, id=11, 426.59375pt x 568.1225pt>
+File: figures/girls_hostel_year2016.pdf Graphic file (type pdf)
+
+<use figures/girls_hostel_year2016.pdf>
+Package pdftex.def Info: figures/girls_hostel_year2016.pdf used on input line 6
+1.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 63.
+
+<figures/girls_hostel_year2017.pdf, id=12, 426.59375pt x 568.1225pt>
+File: figures/girls_hostel_year2017.pdf Graphic file (type pdf)
+
+<use figures/girls_hostel_year2017.pdf>
+Package pdftex.def Info: figures/girls_hostel_year2017.pdf used on input line 6
+5.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 67.
+
+<figures/fac_build.pdf, id=13, 426.59375pt x 568.1225pt>
+File: figures/fac_build.pdf Graphic file (type pdf)
+
+<use figures/fac_build.pdf>
+Package pdftex.def Info: figures/fac_build.pdf used on input line 70.
+(pdftex.def)             Requested size: 427.33475pt x 569.10933pt.
+
+
+LaTeX Warning: Float too large for page by 38.36194pt on input line 72.
+
+<figures/fac_build_Y2013.pdf, id=14, 426.59375pt x 568.1225pt>
+File: figures/fac_build_Y2013.pdf Graphic file (type pdf)
+
+<use figures/fac_build_Y2013.pdf>
+Package pdftex.def Info: figures/fac_build_Y2013.pdf used on input line 74.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 76.
+
+<figures/fac_build_Y2014.pdf, id=15, 426.59375pt x 568.1225pt>
+File: figures/fac_build_Y2014.pdf Graphic file (type pdf)
+
+<use figures/fac_build_Y2014.pdf>
+Package pdftex.def Info: figures/fac_build_Y2014.pdf used on input line 78.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 80.
+
+<figures/fac_build_Y2015.pdf, id=16, 426.59375pt x 568.1225pt>
+File: figures/fac_build_Y2015.pdf Graphic file (type pdf)
+
+<use figures/fac_build_Y2015.pdf>
+Package pdftex.def Info: figures/fac_build_Y2015.pdf used on input line 82.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 84.
+
+<figures/fac_build_Y2016.pdf, id=17, 426.59375pt x 568.1225pt>
+File: figures/fac_build_Y2016.pdf Graphic file (type pdf)
+
+<use figures/fac_build_Y2016.pdf>
+Package pdftex.def Info: figures/fac_build_Y2016.pdf used on input line 86.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 88.
+
+<figures/fac_build_Y2017.pdf, id=18, 426.59375pt x 568.1225pt>
+File: figures/fac_build_Y2017.pdf Graphic file (type pdf)
+
+<use figures/fac_build_Y2017.pdf>
+Package pdftex.def Info: figures/fac_build_Y2017.pdf used on input line 90.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 92.
+
+[1
+
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+[2 <./figures/boys_hostel.pdf>] [3 <./figures/boys_hostel_year2013.pdf>]
+[4 <./figures/boys_hostel_year2014.pdf>] [5 <./figures/boys_hostel_year2015.pdf
+>] [6 <./figures/boys_hostel_year2016.pdf>] [7 <./figures/boys_hostel_year2017.
+pdf>] [8 <./figures/girls_hostel.pdf>] [9 <./figures/girls_hostel_year2013.pdf>
+] [10 <./figures/girls_hostel_year2014.pdf>] [11 <./figures/girls_hostel_year20
+15.pdf>] [12 <./figures/girls_hostel_year2016.pdf>] [13 <./figures/girls_hostel
+_year2017.pdf>] [14 <./figures/fac_build.pdf>] [15 <./figures/fac_build_Y2013.p
+df>] [16 <./figures/fac_build_Y2014.pdf>] [17 <./figures/fac_build_Y2015.pdf>]
+[18 <./figures/fac_build_Y2016.pdf>] [19 <./figures/fac_build_Y2017.pdf>]
+<figures/acad_build.pdf, id=175, 426.59375pt x 568.1225pt>
+File: figures/acad_build.pdf Graphic file (type pdf)
+
+<use figures/acad_build.pdf>
+Package pdftex.def Info: figures/acad_build.pdf used on input line 95.
+(pdftex.def)             Requested size: 427.33475pt x 569.10933pt.
+
+
+LaTeX Warning: Float too large for page by 38.36194pt on input line 97.
+
+<figures/acad_build_Y2013.pdf, id=176, 426.59375pt x 568.1225pt>
+File: figures/acad_build_Y2013.pdf Graphic file (type pdf)
+
+<use figures/acad_build_Y2013.pdf>
+Package pdftex.def Info: figures/acad_build_Y2013.pdf used on input line 99.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 101.
+
+<figures/acad_build_Y2014.pdf, id=177, 426.59375pt x 568.1225pt>
+File: figures/acad_build_Y2014.pdf Graphic file (type pdf)
+
+<use figures/acad_build_Y2014.pdf>
+Package pdftex.def Info: figures/acad_build_Y2014.pdf used on input line 103.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 105.
+
+<figures/acad_build_Y2015.pdf, id=178, 426.59375pt x 568.1225pt>
+File: figures/acad_build_Y2015.pdf Graphic file (type pdf)
+
+<use figures/acad_build_Y2015.pdf>
+Package pdftex.def Info: figures/acad_build_Y2015.pdf used on input line 107.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 109.
+
+<figures/acad_build_Y2016.pdf, id=179, 426.59375pt x 568.1225pt>
+File: figures/acad_build_Y2016.pdf Graphic file (type pdf)
+
+<use figures/acad_build_Y2016.pdf>
+Package pdftex.def Info: figures/acad_build_Y2016.pdf used on input line 111.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 113.
+
+<figures/acad_build_Y2017.pdf, id=180, 426.59375pt x 568.1225pt>
+File: figures/acad_build_Y2017.pdf Graphic file (type pdf)
+
+<use figures/acad_build_Y2017.pdf>
+Package pdftex.def Info: figures/acad_build_Y2017.pdf used on input line 115.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 117.
+
+[20 <./figures/acad_build.pdf>] [21 <./figures/acad_build_Y2013.pdf>] [22 <./fi
+gures/acad_build_Y2014.pdf>] [23 <./figures/acad_build_Y2015.pdf>] [24 <./figur
+es/acad_build_Y2016.pdf>] [25 <./figures/acad_build_Y2017.pdf>]
+<figures/lecture_build.pdf, id=230, 426.59375pt x 568.1225pt>
+File: figures/lecture_build.pdf Graphic file (type pdf)
+
+<use figures/lecture_build.pdf>
+Package pdftex.def Info: figures/lecture_build.pdf used on input line 121.
+(pdftex.def)             Requested size: 427.33475pt x 569.10933pt.
+
+
+LaTeX Warning: Float too large for page by 38.36194pt on input line 123.
+
+<figures/lecture_build_Y2013.pdf, id=231, 426.59375pt x 568.1225pt>
+File: figures/lecture_build_Y2013.pdf Graphic file (type pdf)
+
+<use figures/lecture_build_Y2013.pdf>
+Package pdftex.def Info: figures/lecture_build_Y2013.pdf used on input line 125
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 127.
+
+<figures/lecture_build_Y2014.pdf, id=232, 426.59375pt x 568.1225pt>
+File: figures/lecture_build_Y2014.pdf Graphic file (type pdf)
+
+<use figures/lecture_build_Y2014.pdf>
+Package pdftex.def Info: figures/lecture_build_Y2014.pdf used on input line 129
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 131.
+
+<figures/lecture_build_Y2015.pdf, id=233, 426.59375pt x 568.1225pt>
+File: figures/lecture_build_Y2015.pdf Graphic file (type pdf)
+
+<use figures/lecture_build_Y2015.pdf>
+Package pdftex.def Info: figures/lecture_build_Y2015.pdf used on input line 133
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 135.
+
+<figures/lecture_build_Y2016.pdf, id=234, 426.59375pt x 568.1225pt>
+File: figures/lecture_build_Y2016.pdf Graphic file (type pdf)
+
+<use figures/lecture_build_Y2016.pdf>
+Package pdftex.def Info: figures/lecture_build_Y2016.pdf used on input line 137
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 139.
+
+<figures/lecture_build_Y2017.pdf, id=235, 426.59375pt x 568.1225pt>
+File: figures/lecture_build_Y2017.pdf Graphic file (type pdf)
+
+<use figures/lecture_build_Y2017.pdf>
+Package pdftex.def Info: figures/lecture_build_Y2017.pdf used on input line 141
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 143.
+
+[26 <./figures/lecture_build.pdf>] [27 <./figures/lecture_build_Y2013.pdf>]
+[28 <./figures/lecture_build_Y2014.pdf>] [29 <./figures/lecture_build_Y2015.pdf
+>] [30 <./figures/lecture_build_Y2016.pdf>] [31 <./figures/lecture_build_Y2017.
+pdf>] <figures/facilities_build.pdf, id=285, 426.59375pt x 568.1225pt>
+File: figures/facilities_build.pdf Graphic file (type pdf)
+
+<use figures/facilities_build.pdf>
+Package pdftex.def Info: figures/facilities_build.pdf used on input line 147.
+(pdftex.def)             Requested size: 427.33475pt x 569.10933pt.
+
+
+LaTeX Warning: Float too large for page by 38.36194pt on input line 149.
+
+<figures/facilities_build_Y2013.pdf, id=286, 426.59375pt x 568.1225pt>
+File: figures/facilities_build_Y2013.pdf Graphic file (type pdf)
+
+<use figures/facilities_build_Y2013.pdf>
+Package pdftex.def Info: figures/facilities_build_Y2013.pdf used on input line 
+151.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 153.
+
+<figures/facilities_build_Y2014.pdf, id=287, 426.59375pt x 568.1225pt>
+File: figures/facilities_build_Y2014.pdf Graphic file (type pdf)
+
+<use figures/facilities_build_Y2014.pdf>
+Package pdftex.def Info: figures/facilities_build_Y2014.pdf used on input line 
+155.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 157.
+
+<figures/facilities_build_Y2015.pdf, id=288, 426.59375pt x 568.1225pt>
+File: figures/facilities_build_Y2015.pdf Graphic file (type pdf)
+
+<use figures/facilities_build_Y2015.pdf>
+Package pdftex.def Info: figures/facilities_build_Y2015.pdf used on input line 
+159.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 161.
+
+<figures/facilities_build_Y2016.pdf, id=289, 426.59375pt x 568.1225pt>
+File: figures/facilities_build_Y2016.pdf Graphic file (type pdf)
+
+<use figures/facilities_build_Y2016.pdf>
+Package pdftex.def Info: figures/facilities_build_Y2016.pdf used on input line 
+163.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 165.
+
+<figures/facilities_build_Y2017.pdf, id=290, 426.59375pt x 568.1225pt>
+File: figures/facilities_build_Y2017.pdf Graphic file (type pdf)
+
+<use figures/facilities_build_Y2017.pdf>
+Package pdftex.def Info: figures/facilities_build_Y2017.pdf used on input line 
+167.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 169.
+
+[32 <./figures/facilities_build.pdf>] [33 <./figures/facilities_build_Y2013.pdf
+>] [34 <./figures/facilities_build_Y2014.pdf>] [35 <./figures/facilities_build_
+Y2015.pdf>] [36 <./figures/facilities_build_Y2016.pdf>] [37 <./figures/faciliti
+es_build_Y2017.pdf>]
+<figures/library_build.pdf, id=341, 426.59375pt x 568.1225pt>
+File: figures/library_build.pdf Graphic file (type pdf)
+
+<use figures/library_build.pdf>
+Package pdftex.def Info: figures/library_build.pdf used on input line 173.
+(pdftex.def)             Requested size: 427.33475pt x 569.10933pt.
+
+
+LaTeX Warning: Float too large for page by 38.36194pt on input line 175.
+
+<figures/library_build_Y2013.pdf, id=342, 426.59375pt x 568.1225pt>
+File: figures/library_build_Y2013.pdf Graphic file (type pdf)
+
+<use figures/library_build_Y2013.pdf>
+Package pdftex.def Info: figures/library_build_Y2013.pdf used on input line 177
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 179.
+
+<figures/library_build_Y2014.pdf, id=343, 426.59375pt x 568.1225pt>
+File: figures/library_build_Y2014.pdf Graphic file (type pdf)
+
+<use figures/library_build_Y2014.pdf>
+Package pdftex.def Info: figures/library_build_Y2014.pdf used on input line 181
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 183.
+
+<figures/library_build_Y2015.pdf, id=344, 426.59375pt x 568.1225pt>
+File: figures/library_build_Y2015.pdf Graphic file (type pdf)
+
+<use figures/library_build_Y2015.pdf>
+Package pdftex.def Info: figures/library_build_Y2015.pdf used on input line 185
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 187.
+
+<figures/library_build_Y2016.pdf, id=345, 426.59375pt x 568.1225pt>
+File: figures/library_build_Y2016.pdf Graphic file (type pdf)
+
+<use figures/library_build_Y2016.pdf>
+Package pdftex.def Info: figures/library_build_Y2016.pdf used on input line 189
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 191.
+
+<figures/library_build_Y2017.pdf, id=346, 426.59375pt x 568.1225pt>
+File: figures/library_build_Y2017.pdf Graphic file (type pdf)
+
+<use figures/library_build_Y2017.pdf>
+Package pdftex.def Info: figures/library_build_Y2017.pdf used on input line 193
+.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 195.
+
+[38 <./figures/library_build.pdf>] [39 <./figures/library_build_Y2013.pdf>]
+[40 <./figures/library_build_Y2014.pdf>] [41 <./figures/library_build_Y2015.pdf
+>] [42 <./figures/library_build_Y2016.pdf>] [43 <./figures/library_build_Y2017.
+pdf>] <figures/mess_build.pdf, id=396, 426.59375pt x 568.1225pt>
+File: figures/mess_build.pdf Graphic file (type pdf)
+
+<use figures/mess_build.pdf>
+Package pdftex.def Info: figures/mess_build.pdf used on input line 198.
+(pdftex.def)             Requested size: 427.33475pt x 569.10933pt.
+
+
+LaTeX Warning: Float too large for page by 38.36194pt on input line 200.
+
+<figures/mess_build_Y2013.pdf, id=397, 426.59375pt x 568.1225pt>
+File: figures/mess_build_Y2013.pdf Graphic file (type pdf)
+
+<use figures/mess_build_Y2013.pdf>
+Package pdftex.def Info: figures/mess_build_Y2013.pdf used on input line 202.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 204.
+
+<figures/mess_build_Y2014.pdf, id=398, 426.59375pt x 568.1225pt>
+File: figures/mess_build_Y2014.pdf Graphic file (type pdf)
+
+<use figures/mess_build_Y2014.pdf>
+Package pdftex.def Info: figures/mess_build_Y2014.pdf used on input line 206.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 208.
+
+<figures/mess_build_Y2015.pdf, id=399, 426.59375pt x 568.1225pt>
+File: figures/mess_build_Y2015.pdf Graphic file (type pdf)
+
+<use figures/mess_build_Y2015.pdf>
+Package pdftex.def Info: figures/mess_build_Y2015.pdf used on input line 210.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 212.
+
+<figures/mess_build_Y2016.pdf, id=400, 426.59375pt x 568.1225pt>
+File: figures/mess_build_Y2016.pdf Graphic file (type pdf)
+
+<use figures/mess_build_Y2016.pdf>
+Package pdftex.def Info: figures/mess_build_Y2016.pdf used on input line 214.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 216.
+
+<figures/mess_build_Y2017.pdf, id=401, 426.59375pt x 568.1225pt>
+File: figures/mess_build_Y2017.pdf Graphic file (type pdf)
+
+<use figures/mess_build_Y2017.pdf>
+Package pdftex.def Info: figures/mess_build_Y2017.pdf used on input line 218.
+(pdftex.def)             Requested size: 426.5927pt x 568.1211pt.
+
+
+LaTeX Warning: Float too large for page by 37.3737pt on input line 220.
+
+[44 <./figures/mess_build.pdf>] [45 <./figures/mess_build_Y2013.pdf>] [46 <./fi
+gures/mess_build_Y2014.pdf>] [47 <./figures/mess_build_Y2015.pdf>] [48 <./figur
+es/mess_build_Y2016.pdf>] [49 <./figures/mess_build_Y2017.pdf>]
+(./IIITD_eAnalysis.aux) ) 
+Here is how much of TeX's memory you used:
+ 2492 strings out of 493117
+ 39306 string characters out of 6135434
+ 95400 words of memory out of 5000000
+ 5890 multiletter control sequences out of 15000+600000
+ 8884 words of font info for 34 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 37i,5n,26p,247b,230s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2014/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr17.pfb>
+Output written on IIITD_eAnalysis.pdf (49 pages, 8482653 bytes).
+PDF statistics:
+ 466 PDF objects out of 1000 (max. 8388607)
+ 312 compressed objects within 4 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 241 words of extra memory for PDF output out of 10000 (max. 10000000)
+
