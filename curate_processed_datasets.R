@@ -133,3 +133,93 @@ summarise_missing_data_plot<- function(){
   #ggsave(filename="data_missing_plot.pdf",height = 5,width = 10,units = c("in"))
 }
    
+plot_facetted_histograms_of_Data<- function(){
+  # this function is used to plot histograms of different meters in grid manner.
+  library(ggplot2)
+  library(data.table)
+  library(xts)
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  meter <- "all_buildings_power.csv"
+  data <- fread(paste0(def_path,meter)) 
+  data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
+  temp <- data[data$timestamp <= as.POSIXct("2017-07-07 23:59:59"),]
+  data_long <- reshape2::melt(temp,id.vars=c("timestamp"))
+  #  data_long$value <- ifelse(data_long$value==0,NA,data_long$value)
+  names <- colnames(sumry_data_xts)
+  data_long$value <- data_long$value/1000
+  data_long <- data_long[,2:3]
+  g <- ggplot(data_long,aes(value)) + geom_histogram(binwidth = 1) + facet_wrap(~variable,scales = "free")
+  g <- g + labs(x="Power (kW)", y= "Count") + theme(axis.text = element_text(color = "black"),axis.text.y=element_blank(),axis.title.y=element_blank(),axis.ticks.y = element_blank())
+  g
+  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
+  #ggsave(filename="data_histograms.pdf",height = 6,width = 8,units = c("in"))
+}
+
+
+plot_histograms_hour_wise_data<- function(){
+  # this function is used to plot hour-wise consumption of different buildings
+  library(ggplot2)
+  library(data.table)
+  library(xts)
+  library(dplyr)
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  meter <- "all_buildings_power.csv"
+  data <- fread(paste0(def_path,meter)) 
+  data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
+  start_date <- as.POSIXct("2017-01-01")
+  end_date <- as.POSIXct("2017-04-30 23:59:59")
+  data <- data[data$timestamp>=start_date & data$timestamp <= end_date,]
+  data$hour <- lubridate::hour(data$timestamp)
+  tbl <- as_data_frame(data)
+  dat <- tbl %>% group_by(hour) %>% summarise_all(funs(mean(.,na.rm=TRUE))) %>% select(-timestamp)
+  dat_long <- reshape2::melt(dat,id.vars="hour")
+  g <- ggplot(dat_long,aes(hour,value/1000)) + geom_bar(stat="identity") + facet_wrap(~variable,scales = "free")
+  g <- g + labs(x="Day hour", y= "Power(kW)") + theme(axis.text = element_text(color = "black"))
+  g
+  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
+ # ggsave(filename="day_hour_usage_plot_2.pdf",height = 5,width = 8,units = c("in"))
+}
+
+plot_power_and_temperature_data<- function(){
+  # this function is used to plot monthly energy data and the average montly temperture
+  library(ggplot2)
+  library(data.table)
+  library(xts)
+  library(dplyr)
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  meter <- "all_buildings_power.csv"
+  data <- fread(paste0(def_path,meter)) 
+  data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
+  start_date <- as.POSIXct("2013-08-10")
+  end_date <- as.POSIXct("2017-07-07 23:59:59")
+  data <- data[data$timestamp>=start_date & data$timestamp <= end_date,]
+  data_xts <- xts(data[,-1],fasttime::fastPOSIXct(data$timestamp)-19800)
+  power_sum <- apply.monthly(data_xts,apply,2, sum, na.rm=TRUE)
+  # energy = power * time
+  # energy = sum(power*1/60)*1/1000 [kWH]
+  energy_month <- power_sum/60000
+
+  
+  weather_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/weatherdata_PROCESSED/"
+  dirs <- list.files(weather_path,recursive = TRUE,include.dirs = TRUE,pattern = "*FULL.csv")
+  weather_files <- lapply(dirs, function(x){
+    df <- fread(paste0(weather_path,x))
+    df_xts <- xts(df[,-1],fasttime::fastPOSIXct(df$timestamp)-19800)
+    return(df_xts)
+  })
+  weather<- do.call(rbind,weather_files)
+  weather_month <- apply.monthly(weather,mean)
+  
+  temp <- data.frame(timestamp=index(energy_month),coredata(energy_month$Academic),coredata(weather_month$TemperatureC))
+  colnames(temp) <- c("timestamp","Energy","Temperature")
+  #https://rpubs.com/MarkusLoew/226759
+  p <- ggplot(temp,aes(timestamp,Energy)) + geom_histogram(aes(colour="Energy"),stat="Identity")
+  p <- p + geom_line(aes(y=Temperature*700,colour="Temperature"))
+  p <- p + scale_y_continuous(sec.axis = sec_axis(~./700, name = "Temperature"*"("~degree*"C)"  ))
+  p <- p + scale_colour_manual(values = c("blue", "red")) 
+  p <- p + labs(y = "Energy (kWh)", x = "",colour = "Parameter") + scale_x_datetime(breaks=scales::date_breaks("6 month"),labels = scales::date_format("%b-%Y"))
+  p <- p + theme(legend.position = c(0.1,0.9),axis.text = element_text(color = "black"))
+  p
+  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
+  #ggsave(filename="energy_temperature.pdf",height = 3,width = 10,units = c("in"))
+}
