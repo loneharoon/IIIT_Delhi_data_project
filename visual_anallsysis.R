@@ -1,10 +1,11 @@
+# this script is used to visuaize the processed data frames.
 library(data.table)
 library(xts)
 library(fasttime)
 #library(ggvis)
 def_path_proc <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed/"
-meter <- "acad_build_mains.csv"
-df <- fread(paste0(def_path_proc,meter))
+meter <- "boys_hostel_ups.csv"
+df <- fread(paste0(def_path_proc,meter),nrows = 1000)
 df_xts <- xts(df[,2:NCOL(df)], fastPOSIXct(df$timestamp)-19800)
 
 startdate <- fastPOSIXct(paste0("2013-09-01",' ',"00:00:00"))-19800
