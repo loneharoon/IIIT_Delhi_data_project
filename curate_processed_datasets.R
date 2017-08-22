@@ -9,10 +9,10 @@ library(data.table)
 create_version_2_of_dataset <- function() {
   # this function exclusiely creates version 2 of the dataset
   def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed/"
-  meter <- "boys_hostel_ups.csv"
+  meter <- "girls_hostel_ups.csv"
   data <- fread(paste0(def_path,meter))
-  # the next step is applied only for the files: library, lecture, mess and boys_ups
-  #data <- data[1:(2056966-646),]
+  # the next step is applied only for the files: library, lecture, mess and boys_ups,girls_ups
+  data <- data[1:(2056320),]
   data_xts <- xts(data[,2:ncol(data)],fasttime::fastPOSIXct(data$timestamp)-19800)
   start_date <- as.POSIXct("2013-08-10")
   end_date <- as.POSIXct("2017-07-07 23:59:59")
@@ -23,7 +23,7 @@ create_version_2_of_dataset <- function() {
   dframe <- data.frame(timestamp=index(xts_without_NA_rows),coredata(xts_without_NA_rows))
   dframe$timestamp <- as.numeric(dframe$timestamp)
   save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
-  #write.csv(round(dframe,5),paste0(save_path,meter),row.names=FALSE)
+  # write.csv(round(dframe,5),paste0(save_path,meter),row.names=FALSE)
   t2 <- 2056966
   t1 <- t2 - 1440 * 1
   data[t1:t2]$timestamp
@@ -32,7 +32,7 @@ create_version_2_of_dataset <- function() {
 
 aggregate_one_parameter_of_all_buildings <- function() {
   # this function does two things:
-  # create all CSV contining only power data of all buildings
+  # create a CSV contining only power data of all buildings
   # create csv showing which points are missing and which are there  
   path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
   fl <- list.files(path,pattern = "*.csv")
@@ -118,6 +118,13 @@ summarise_missing_data_plot<- function(){
   #return(sumry)
   })
   sumry_data_xts <-  do.call(rbind,sumry_data)
+  # Calculate uptime for each meter
+  #apply(sumry_data_xts,2,sum,na.rm=TRUE)/1428 #[1428 is the total no. of days]
+  #    Academic    Boys_main  Boys_backup   Facilities   Girls_main Girls_backup      Lecture      Library         Mess   #   0.9880952    0.7261905    0.7331933    0.8928571    0.7002801    0.9985994    0.9880952    0.7240896    0.8725490
+  uptime<- apply(sumry_data_xts,2,sum,na.rm=TRUE)
+  # Next line has been counted manually, 1428 represents total no. of days, subtracted numbers from 1428 shows that corresponding metter started or stopped eary by the mentioned days
+  divisor  <- c(1428,1428,1428,1428-97,1428,1428,1428,1428-25,1428-45)
+  uptime <-round(as.numeric(uptime/divisor)*100,1)
   temp <- data.frame(timestamp=index(sumry_data_xts),coredata(sumry_data_xts))
   mulfactor <- 1:(NCOL(temp)-1)
   for (i in 2:NCOL(temp)) {
@@ -128,9 +135,11 @@ summarise_missing_data_plot<- function(){
   g <- ggplot(data_long,aes(timestamp,value,color=variable)) + geom_line()
   g <- g + theme(axis.text = element_text(color="black"),axis.text.y = element_blank(),axis.ticks.y = element_blank(), legend.title = element_blank(), legend.position = "none" )+ labs(x= " ", y="Meter") + scale_x_date(breaks=scales::date_breaks("6 month"),labels = scales::date_format("%b-%Y"))
   g <- g + annotate("text",x=as.Date("2013-08-30"),y=seq(1.3,9.3,1),label=names)
+  g <- g + annotate("text",x=as.Date("2017-07-07"),y=seq(1.3,9.3,1),label=uptime)
+  g <- g + scale_y_continuous(sec.axis = sec_axis(~./1, name = "Uptime (%)"  ))
   g
   setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
-  #ggsave(filename="data_missing_plot.pdf",height = 5,width = 10,units = c("in"))
+  # ggsave(filename="data_missing_plot_2.pdf",height = 5,width = 10,units = c("in"))
 }
    
 plot_facetted_histograms_of_Data<- function(){
@@ -164,20 +173,20 @@ plot_histograms_hour_wise_data<- function(){
   library(dplyr)
   def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
   meter <- "all_buildings_power.csv"
-  data <- fread(paste0(def_path,meter)) 
-  data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
+  df <- fread(paste0(def_path,meter)) 
+  df$timestamp <- fasttime::fastPOSIXct(df$timestamp)-19800
   start_date <- as.POSIXct("2017-01-01")
   end_date <- as.POSIXct("2017-04-30 23:59:59")
-  data <- data[data$timestamp>=start_date & data$timestamp <= end_date,]
-  data$hour <- lubridate::hour(data$timestamp)
-  tbl <- as_data_frame(data)
+  temp <- df[df$timestamp>=start_date & df$timestamp <= end_date,]
+  temp$hour <- lubridate::hour(temp$timestamp)
+  tbl <- as_data_frame(temp)
   dat <- tbl %>% group_by(hour) %>% summarise_all(funs(mean(.,na.rm=TRUE))) %>% select(-timestamp)
   dat_long <- reshape2::melt(dat,id.vars="hour")
   g <- ggplot(dat_long,aes(hour,value/1000)) + geom_bar(stat="identity") + facet_wrap(~variable,scales = "free")
   g <- g + labs(x="Day hour", y= "Power(kW)") + theme(axis.text = element_text(color = "black"))
   g
   setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
- # ggsave(filename="day_hour_usage_plot_2.pdf",height = 5,width = 8,units = c("in"))
+  ggsave(filename="day_hour_usage_plot_2.pdf",height = 5,width = 8,units = c("in"))
 }
 
 plot_power_and_temperature_data<- function(){
