@@ -142,6 +142,58 @@ summarise_missing_data_plot<- function(){
   # ggsave(filename="data_missing_plot_2.pdf",height = 5,width = 10,units = c("in"))
 }
    
+summarise_missing_data_plot_WITH_TRANsformer<- function(){
+  # this function is used to plot the plot of paper which shows the days on which quater of the data is missing by gaps. This version also shows the transformer data
+  library(ggplot2)
+  library(data.table)
+  library(xts)
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  meter <- "data_present_status.csv"
+  data <- fread(paste0(def_path,meter)) 
+  data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
+  temp <- data[data$timestamp <= as.POSIXct("2017-07-07 23:59:59"),]
+  temp_xts <- xts(temp[,-1],temp$timestamp)
+  #ARRANGE TRANSFORMER DATA##
+  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/data_present_status_transformer.csv"
+  df_tran <-  fread(transformer_data)
+  df_tran_xts <- xts(df_tran[,-1], fasttime::fastPOSIXct(df_tran$timestamp) - 19800)
+  colnames(df_tran_xts) <- c("Transformer_1","Transformer_2","Transformer_3")
+  ########
+  temp_xts <- cbind(temp_xts,df_tran_xts)
+  
+  day_data <- split.xts(temp_xts,f="days",k=1)
+  sumry_data <- lapply(day_data, function(x) {
+    #x <- day_data[[1]]
+    sumry <- apply(x,2,sum)
+    sumry <- ifelse(sumry <=1440/4, NA, 1)
+    return(xts(data.frame(t(sumry)),as.Date(index(x[1]),tz="Asia/Kolkata")))
+    #return(sumry)
+  })
+  sumry_data_xts <-  do.call(rbind,sumry_data)
+  # Calculate uptime for each meter
+  #apply(sumry_data_xts,2,sum,na.rm=TRUE)/1428 #[1428 is the total no. of days]
+  #    Academic    Boys_main  Boys_backup   Facilities   Girls_main Girls_backup      Lecture      Library         Mess   #   0.9880952    0.7261905    0.7331933    0.8928571    0.7002801    0.9985994    0.9880952    0.7240896    0.8725490
+  uptime<- apply(sumry_data_xts,2,sum,na.rm=TRUE)
+  # Next line has been counted manually, 1428 represents total no. of days, subtracted numbers from 1428 shows that corresponding metter started or stopped eary by the mentioned days
+  divisor  <- c(1428,1428,1428,1428-97,1428,1428,1428,1428-25,1428-45,1428-105,1428-105,1428-105)
+  uptime <-round(as.numeric(uptime/divisor)*100,1)
+  temp <- data.frame(timestamp=index(sumry_data_xts),coredata(sumry_data_xts))
+  mulfactor <- 1:(NCOL(temp)-1)
+  for (i in 2:NCOL(temp)) {
+    temp[,i] <- temp[,i] * mulfactor[i-1] }
+  data_long <- reshape2::melt(temp,id.vars=c("timestamp"))
+  #  data_long$value <- ifelse(data_long$value==0,NA,data_long$value)
+  names <- colnames(sumry_data_xts)
+  g <- ggplot(data_long,aes(timestamp,value,color=variable)) + geom_line()
+  g <- g + theme(axis.text = element_text(color="black"),axis.text.y = element_blank(),axis.ticks.y = element_blank(), legend.title = element_blank(), legend.position = "none" )+ labs(x= " ", y="Meter") + scale_x_date(breaks=scales::date_breaks("6 month"),labels = scales::date_format("%b-%Y"))
+  g <- g + annotate("text",x=as.Date("2013-08-10"),y=seq(1.3,12.3,1),label=names,hjust=0)
+  g <- g + annotate("text",x=as.Date("2017-07-07"),y=seq(1.3,12.3,1),label=uptime)
+  g <- g + scale_y_continuous(sec.axis = sec_axis(~./1, name = "Uptime (%)"  ))
+  g
+  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
+  # ggsave(filename="data_missing_plot_version_3.pdf",height = 5,width = 10,units = c("in"))
+}
+
 plot_facetted_histograms_of_Data<- function(){
   # this function is used to plot histograms of different meters in grid manner.
   library(ggplot2)
