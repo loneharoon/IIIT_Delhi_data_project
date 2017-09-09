@@ -194,6 +194,57 @@ summarise_missing_data_plot_WITH_TRANsformer<- function(){
   # ggsave(filename="data_missing_plot_version_3.pdf",height = 5,width = 10,units = c("in"))
 }
 
+plot_facetted_histograms_of_Data_WITH_TRANsformer<- function(){
+  # this function is used to plot histograms of different meters in grid manner.
+  # THIS ONE ALSO INCLUDES TRANSFORMER DATA
+  library(ggplot2)
+  library(data.table)
+  library(xts)
+  # REQUIRED FUNCTION
+  remove_outliers <- function(x, na.rm = TRUE, ...) {
+    # remove outliers from columns and fill with NAS
+    # https://stackoverflow.com/a/4788102/3317829
+    qnt <- quantile(x, probs=c(.25, .75), na.rm = na.rm, ...)
+    H <- 1.5 * IQR(x, na.rm = na.rm)
+    y <- x
+    y[x < (qnt[1] - H)] <- NA
+    y[x > (qnt[2] + H)] <- NA
+    y
+  }
+  
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  meter <- "all_buildings_power.csv"
+  data <- fread(paste0(def_path,meter)) 
+  data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
+  df_xts <- xts(data[,-1],data$timestamp)
+  #ARRANGE TRANSFORMER DATA##
+  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/all_transformer_power.csv"
+  df_tran <-  fread(transformer_data)
+  df_tran_xts <- xts(df_tran[,-1], fasttime::fastPOSIXct(df_tran$timestamp) - 19800)
+  colnames(df_tran_xts) <- c("Transformer_1","Transformer_2","Transformer_3")
+  ########
+  df_xts <- cbind(df_xts,df_tran_xts)
+  df <- data.frame(timestamp=index(df_xts),coredata(df_xts))
+  # handle zero readings in Lecture building
+  df$Lecture <- ifelse(df$Lecture==0,NA,df$Lecture)
+  # remove timestamp column and apply remove_outliers function
+  temp2 <- apply(df[,-1],2,remove_outliers)
+  data_long <- reshape2::melt(temp2)
+  data_long$value <- data_long$value/1000
+  data_long <- data_long[,2:3]
+  #data_long$value <- ifelse(data_long$value==0,NA,data_long$value)
+  g <- ggplot(data_long,aes(value)) + geom_histogram(binwidth = 1) + facet_wrap(~Var2 ,scales = "free")
+  g <- g + labs(x="Power (kW)", y= "Count") + theme(axis.text = element_text(color = "black"),axis.text.y =  element_blank(),axis.title.y=element_blank(),axis.ticks.y = element_blank())
+  g
+  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
+  # ggsave(filename="data_histograms.pdf",height = 8,width = 12,units = c("in"))
+}
+
+
+
+
+
+
 plot_facetted_histograms_of_Data<- function(){
   # this function is used to plot histograms of different meters in grid manner.
   library(ggplot2)
