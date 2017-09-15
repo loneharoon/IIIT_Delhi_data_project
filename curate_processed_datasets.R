@@ -78,6 +78,28 @@ sqeeze_datasets <- function() {
   #  write.csv(temp,paste0(save_path,meter),row.names=FALSE)
 }
 
+sqeeze_all_builidngs_power_datasets <- function() {
+  # this function is used to squeeze power reading of all the buildings, i.e., convert timestamp to unix timeformat and remove rows which contain NA's
+  #def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/"
+  meter <- "all_transformer_power.csv"
+  data <- fread(paste0(def_path,meter))
+  data$timestamp <- as.POSIXct(data$timestamp,origin = "1970-01-01", tz="Asia/Kolkata")
+  # start_date <- as.POSIXct("2013-08-10")
+  #  end_date <- as.POSIXct("2017-07-07 23:59:59")
+  # temp <- data[data$timestamp>=start_date,]
+  data_xts <- xts(data[,-1],data$timestamp)
+  
+  na_rows <- apply(data_xts,1,function(x) all(is.na(x)))
+  xts_without_NA_rows <- data_xts[!na_rows,] 
+  dframe <- data.frame(timestamp=index(xts_without_NA_rows),coredata(xts_without_NA_rows))
+  dframe$timestamp <- as.numeric(dframe$timestamp)
+  #save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/"
+  #write.csv(dframe,paste0(save_path,"all_transformer_power_UTC_timstamp.csv"),row.names=FALSE)
+}
+
+
 show_data_presence_plot<- function(){
   # this function is used to show missing data using default minutely data.
   library(ggplot2)
@@ -468,24 +490,17 @@ compute_campus_energy <- function(){
   #https://rpubs.com/MarkusLoew/226759
   temp3 <- temp2
   temp3$timestamp <- as.yearmon(temp3$timestamp)
-  #  p <- ggplot(temp2,aes(timestamp,Energy)) + geom_histogram(aes(colour="Energy"),stat="Identity")
-  #  p <- p + geom_line(aes(y=Temperature*200,colour="Temperature"))
-  #  p <- p + scale_y_continuous(sec.axis = sec_axis(~./200, name = "Temperature"*"("~degree*"C)"  ))
-  #  p <- p + scale_colour_manual(values = c("blue", "red")) 
-  #   p <- p + labs(y = "Energy (kWh)", x = "",colour = "Parameter") + scale_x_date(breaks=scales::date_breaks("2 month"),labels = scales::date_format("%b-%Y",tz="UTC"))
-  # # p <- p + labs(y = "Energy (kWh)", x = "",colour = "Parameter") + scale_x_date(breaks=seq(as.POSIXct("2013-11-30"),as.POSIXct("2017-06-30"),"1 mon"),labels = scales::date_format("%b-%Y",tz="Asia/Kolkata"))
-  #   p <- p + theme(legend.position = c(0.1,0.9),axis.text = element_text(color = "black"),axis.text.x = element_text(angle = 90, hjust = 1))
-  #  p
   p <- ggplot(temp3,aes(timestamp,Energy)) + geom_histogram(aes(colour="Energy"),stat="Identity",bindwidth=10)
   p <- p + geom_line(aes(y=Temperature*200,colour="Temperature"))
   p <- p + scale_y_continuous(sec.axis = sec_axis(~./200, name = "Temperature"*"("~degree*"C)"  ))
   p <- p + scale_colour_manual(values = c("black", "red")) 
   p <- p + labs(y = "Energy (kWh)", x = "",colour = "Parameter") 
   p <- p + scale_x_yearmon(format ="%b-%Y",n=30)
-  p <- p + theme(legend.position = c(0.1,0.9),axis.text = element_text(color = "black"),axis.text.x = element_text(angle = 90, hjust = 1))
+  p <- p + theme(legend.position = c(0.1,0.9),axis.text = element_text(color = "black"),axis.text.x = element_text(angle = 90, hjust = 1),
+                 legend.background = element_rect(fill = "transparent", colour = "transparent"))
   p
   setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
-  #ggsave(filename="campus_total_energy_and_temperature.pdf",height = 4,width = 10,units = c("in"))
+  # ggsave(filename="campus_total_energy_and_temperature.pdf",height = 4,width = 10,units = c("in"))
 }
 
 
