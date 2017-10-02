@@ -3,11 +3,12 @@ library(xts)
 library(dplyr)
 library(tbl2xts) # converts tibble to xts format
 
-def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/"
-features <- c("power","energy","current","voltage","frequency","power_factor")
+def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply"
+#features <- c("power","energy","current","voltage","frequency","power_factor")
+features <- c("power","current","voltage","power_factor")
 sub_paths <- sapply(features,function(x) return(paste0(def_path,x,"/")))
 
-meter <- "mess_build_mains.csv"
+meter <- "transformer_1.csv"
 meter_features <- paste0(sub_paths,meter)
 
 df_files <- lapply(meter_features,function(x) {

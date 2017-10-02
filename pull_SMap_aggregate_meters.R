@@ -9,16 +9,16 @@ RSmap("http://energy.iiitd.edu.in:9102/backend")
 #    CAUTION: daterange, csv filename, if more than one stream then look at code
 pulldata<-function(){
   
-  start <- as.numeric(strptime("01-01-2017", "%m-%d-%Y"))*1000
-  end <- as.numeric(strptime("06-30-2017", "%m-%d-%Y"))*1000
+  start <- as.numeric(strptime("08-10-2013", "%m-%d-%Y"))*1000
+  end <- as.numeric(strptime("07-08-2017 ", "%m-%d-%Y"))*1000
   data_column <- "Power"
-  default_path = paste0("/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/","girls_backup","/")
+  default_path = paste0("/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/","power_factor","/")
   print(default_path)
   #fifteen_min_path = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/fifteen_minutes/"
-  oat <- "f12c880d-1850-5a8f-9628-14656048d39d"
+  oat <- "2046e207-f71d-504d-86a4-abab5e1f1563"
   data <- RSmap.data_uuid(oat, start, end)
   
-  filename = "total_building_backup.csv"
+  filename = "transformer_1.csv"
   
   dframe=as.data.frame(cbind(data[[1]]$time,data[[1]]$value))
   names(dframe) = c("timestamp",data_column)

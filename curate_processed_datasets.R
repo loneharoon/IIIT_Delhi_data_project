@@ -262,11 +262,6 @@ plot_facetted_histograms_of_Data_WITH_TRANsformer<- function(){
   # ggsave(filename="data_histograms.pdf",height = 8,width = 12,units = c("in"))
 }
 
-
-
-
-
-
 plot_facetted_histograms_of_Data<- function(){
   # this function is used to plot histograms of different meters in grid manner.
   library(ggplot2)
@@ -490,17 +485,19 @@ compute_campus_energy <- function(){
   #https://rpubs.com/MarkusLoew/226759
   temp3 <- temp2
   temp3$timestamp <- as.yearmon(temp3$timestamp)
-  p <- ggplot(temp3,aes(timestamp,Energy)) + geom_histogram(aes(colour="Energy"),stat="Identity",bindwidth=10)
-  p <- p + geom_line(aes(y=Temperature*200,colour="Temperature"))
+  temp3$category <- rep(c('cat1','cat2'),c(22,23))
+  temp3$category <- as.factor(temp3$category)
+  p <- ggplot() 
+  p <- p + geom_line(data=temp3,aes(timestamp,y=Temperature*200,linetype="red"),colour="red")
+  p <- p + geom_histogram(data=temp3,aes(timestamp,Energy,colour="black"),stat="Identity",bindwidth=10)
+  p <- p + scale_x_yearmon(format ="%b-%Y",n=10)
   p <- p + scale_y_continuous(sec.axis = sec_axis(~./200, name = "Temperature"*"("~degree*"C)"  ))
-  p <- p + scale_colour_manual(values = c("black", "red")) 
-  p <- p + labs(y = "Energy (kWh)", x = "",colour = "Parameter") 
-  p <- p + scale_x_yearmon(format ="%b-%Y",n=30)
-  p <- p + theme(legend.position = c(0.1,0.9),axis.text = element_text(color = "black"),axis.text.x = element_text(angle = 90, hjust = 1),
-                 legend.background = element_rect(fill = "transparent", colour = "transparent"))
-  p
-  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
-  # ggsave(filename="campus_total_energy_and_temperature.pdf",height = 4,width = 10,units = c("in"))
+  p <- p + scale_linetype_manual( labels="Temperature", values = "solid") 
+  p <- p + labs(y = "Energy (kWh)", x = "") 
+  p <- p + scale_colour_manual(name="", labels= "Energy", values = 'black')
+  p <- p+  guides(colour = guide_legend(override.aes = list(colour = "black", size = 1), order = 1), linetype = guide_legend(title = NULL, override.aes = list(linetype = "solid", colour = "red", size = 1),order = 2)) 
+  p <- p + theme(legend.key = element_rect(fill = "white", colour = NA),legend.spacing = unit(0, "lines"))
+  # ggsave(filename="campus_total_energy_and_temperature_2.pdf",height = 4,width = 10,units = c("in"))
 }
 
 
@@ -516,6 +513,49 @@ show_transformer_data_present_status <- function(){
   df_status <- data.frame(timestamp=index(df_xts),data_present_status)
   savepath <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/"
   # write.csv(df_status,paste0(savepath,"data_present_status_transformer.csv"),row.names = FALSE)
+}
+
+plot_line_graph_hour_wise_data<- function(){
+  # this function is used to plot hour-wise consumption of different buildings and supply transformer
+  library(ggplot2)
+  library(data.table)
+  library(xts)
+  library(dplyr)
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  meter <- "all_buildings_power.csv"
+  df <- fread(paste0(def_path,meter)) 
+  df$timestamp <- fasttime::fastPOSIXct(df$timestamp)-19800
+  df_xts <- xts(df[,-1],df$timestamp)
+  
+  #ARRANGE TRANSFORMER DATA##
+  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/all_transformer_power.csv"
+  df_tran <-  fread(transformer_data)
+  df_tran_xts <- xts(df_tran[,-1], fasttime::fastPOSIXct(df_tran$timestamp) - 19800)
+  colnames(df_tran_xts) <- c("Transformer_1","Transformer_2","Transformer_3")
+  ########
+  df_xts_comb <- cbind(df_xts,df_tran_xts)
+  # get January data
+  start_date <- as.POSIXct("2017-01-01")
+  end_date <- as.POSIXct("2017-01-30 23:59:59")
+  temp <- df_xts_comb[paste0(start_date,"/",end_date)]
+  data_month_1 <- create_data_summary(temp,month="January")
+  # get June data
+  start_date <- as.POSIXct("2016-08-01")
+  end_date <- as.POSIXct("2016-08-30 23:59:59")
+  temp <- df_xts_comb[paste0(start_date,"/",end_date)]
+  data_month_6 <- create_data_summary(temp,month="August")
+  
+  comb_data<- rbind(data_month_1,data_month_6)
+  
+  dat_long <- reshape2::melt(comb_data,id.vars=c("hour","Month"))
+  dat_long$Month <- as.factor(dat_long$Month)
+  
+  g <- ggplot(dat_long,aes(hour,value/1000)) + geom_line(aes(group=Month,colour=Month,linetype=Month),size=0.8) + facet_wrap(~variable,scales = "free")
+  g <- g + labs(x="Day hour", y= "Power(kW)") + theme(axis.text = element_text(color = "black"),legend.position = "top")
+  g
+  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
+  # 
+  # ggsave(filename="day_hour_usage_plot_2_3.pdf",height = 8,width = 11,units = c("in"))
 }
 
 
