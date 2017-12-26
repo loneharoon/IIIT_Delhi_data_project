@@ -557,5 +557,3 @@ plot_line_graph_hour_wise_data<- function(){
   # 
   # ggsave(filename="day_hour_usage_plot_2_3.pdf",height = 8,width = 11,units = c("in"))
 }
-
-
