@@ -55,13 +55,6 @@ print(unique_traps)
  'ciscoLwappSiIdrDevice']
 #%% Find all packets of a single day and then store them building wise
 
-x = lis[5]['ts']['$date']
-xfor = datetime.strptime(lis[5]['ts']['$date'],'%Y-%m-%dT%H:%M:%S.000Z')
-xfor.strftime('%Y-%m-%d %H:%M:%S')
-
-pd.to_datetime(lis[5]['ts']['$date'])
-
-
 count = 0
 traps = []
 with open(fl) as infile:
@@ -69,12 +62,13 @@ with open(fl) as infile:
         #print(line)
         traps.append(eval(line)['oid'])
         count = count + 1
-        #if count == 20:
-         # break
+        if count == 1571:
+          break
 unique_traps = np.unique(traps)   
 print(unique_traps)
 #%% Create dataframe of required information
 #took 2 hours to get data of 5 days, read till line number 1206104
+# second time parsed till line 1339137 in 30 minutes
 packet_count = 0
 df = pd.DataFrame()
 with open(fl) as infile:
@@ -83,26 +77,37 @@ with open(fl) as infile:
         packet_count += 1
         if packet['oid'] == 'ciscoLwappDot11ClientMovedToRunState':
           temp = {}
-          temp['trap_type'] = packet['oid']
-          temp['trap_time'] =  pd.to_datetime(packet['ts']['$date'])
+          print(packet_count)
+         # temp['trap_type'] = packet['oid']
           temp['trap_AP']   =  packet['cLApName']
           temp['trap_client'] = packet['cldcClientIPAddress'] 
+          temp['session_start'] =  pd.to_datetime(packet['ts']['$date'])
+          temp_val = packet.get('endTs','Empty')
+          if temp_val != 'Empty':  
+            temp['session_end'] = pd.to_datetime(temp_val['$date'])
+          else:
+            temp['session_end'] = float('nan')
           df = df.append(temp,ignore_index=True)
-          print(packet_count)
-        elif packet['oid'] == 'bsnDot11StationDeauthenticate' :
-          temp = {}
-          temp['trap_type'] = packet['oid']
-          temp['trap_time'] =  pd.to_datetime(packet['ts']['$date'])
-          temp['trap_AP']   = packet['bsnAPName']
-          temp['trap_client'] = packet['bsnUserIpAddress']
-          df = df.append(temp,ignore_index=True)
-          print(packet_count)
+         
+#        elif packet['oid'] == 'bsnDot11StationDeauthenticate' :
+#          temp = {}
+#          temp['trap_type'] = packet['oid']
+#          temp['trap_time'] =  pd.to_datetime(packet['ts']['$date'])
+#          temp['trap_AP']   = packet['bsnAPName']
+#          temp['trap_client'] = packet['bsnUserIpAddress']
+#          df = df.append(temp,ignore_index=True)
+#          print(packet_count)
         #if packet_count == 100:
          # break
- filepath = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days.csv"
- df.to_csv(filepath)
+filepath = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv"
+df.to_csv(filepath)
 #%% Use df to get occupancy stats
-df = pd.read_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days.csv",dtype={'trap_AP':str,'trap_client':str,'trap_type':str}) 
+df = pd.read_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv",dtype={'trap_AP':str,'trap_client':str,'trap_type':str}) 
 
 df_BH = df[df.trap_AP.str.startswith('BH')]
 
+#%%
+for i in df_BH.shape[0]:
+  temp = df_BH.iloc[i,]
+  
+  
