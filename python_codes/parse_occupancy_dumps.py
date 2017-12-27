@@ -11,12 +11,12 @@ Created on Thu Dec 21 22:10:15 2017
 import numpy as np
 import pandas as pd
 
-
+fl = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/data_subset.json"
 #%%
 
  num_lines = sum(1 for line in open(fl)) # get total number of lines or records in a file 11962709
 #%%
-fl = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/data_subset.json"
+
 count = 0
 lis = []
 with open(fl) as infile:
@@ -74,12 +74,13 @@ with open(fl) as infile:
 unique_traps = np.unique(traps)   
 print(unique_traps)
 #%% Create dataframe of required information
+#took 2 hours to get data of 5 days, read till line number 1206104
 packet_count = 0
 df = pd.DataFrame()
 with open(fl) as infile:
     for line in infile:
         packet = eval(line)
-        packet_count += packet_count
+        packet_count += 1
         if packet['oid'] == 'ciscoLwappDot11ClientMovedToRunState':
           temp = {}
           temp['trap_type'] = packet['oid']
@@ -87,15 +88,21 @@ with open(fl) as infile:
           temp['trap_AP']   =  packet['cLApName']
           temp['trap_client'] = packet['cldcClientIPAddress'] 
           df = df.append(temp,ignore_index=True)
+          print(packet_count)
         elif packet['oid'] == 'bsnDot11StationDeauthenticate' :
+          temp = {}
           temp['trap_type'] = packet['oid']
           temp['trap_time'] =  pd.to_datetime(packet['ts']['$date'])
           temp['trap_AP']   = packet['bsnAPName']
           temp['trap_client'] = packet['bsnUserIpAddress']
           df = df.append(temp,ignore_index=True)
-        if packet_count == 100:
-          break
- 
-print(unique_traps)
+          print(packet_count)
+        #if packet_count == 100:
+         # break
+ filepath = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days.csv"
+ df.to_csv(filepath)
+#%% Use df to get occupancy stats
+df = pd.read_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days.csv",dtype={'trap_AP':str,'trap_client':str,'trap_type':str}) 
 
+df_BH = df[df.trap_AP.str.startswith('BH')]
 
