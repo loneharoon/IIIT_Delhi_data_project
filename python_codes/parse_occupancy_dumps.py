@@ -10,6 +10,7 @@ Created on Thu Dec 21 22:10:15 2017
 #%% 
 import numpy as np
 import pandas as pd
+from datetime import datetime
 
 fl = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/data_subset.json"
 #%%
@@ -102,12 +103,25 @@ with open(fl) as infile:
 filepath = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv"
 df.to_csv(filepath)
 #%% Use df to get occupancy stats
-df = pd.read_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv",dtype={'trap_AP':str,'trap_client':str,'trap_type':str}) 
+df = pd.read_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv",dtype={'trap_AP':str,'trap_client':str,'trap_type':str,'session_start':datetime,'session_end':datetime}) 
 
 df_BH = df[df.trap_AP.str.startswith('BH')]
-
+df_BH.session_start = pd.to_datetime(df_BH.session_start)
+df_BH.session_end = pd.to_datetime(df_BH.session_end)
+df_BH.session_start = df_BH.session_start.apply(lambda x:x.round('T'))
 #%%
-for i in df_BH.shape[0]:
-  temp = df_BH.iloc[i,]
+time_seq  = pd.date_range('2017-07-01',periods = 120, freq ='T')
+
+client_count  = []
+for tm in time_seq:
+  count = 0
+  for key,entry in df_BH.iterrows():
+    if tm >= entry['session_start'] and tm <= entry['session_end']:
+      count = count + 1
+      print(count)
+    if tm < entry['session_start'] or tm > entry['session_end']:
+      break
+  client_count.append(count)
+  dfc = pd.DataFrame(client_count,index=time_seq)
   
   
