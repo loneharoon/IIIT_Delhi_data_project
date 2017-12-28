@@ -123,5 +123,14 @@ for tm in time_seq:
       break
   client_count.append(count)
   dfc = pd.DataFrame(client_count,index=time_seq)
-  
-  
+#%%
+seq1 =  pd.date_range('2017-07-01',periods = 60, freq ='T')
+seq2 =  pd.date_range('2017-07-01',periods = 120, freq ='T')
+#%%
+sessions = []
+for key,entry in df_BH.iterrows():
+  seq = pd.Series(1,pd.date_range(start= entry['session_start'],end = entry['session_end'], freq ='T'))
+  sessions.append(seq)
+res = pd.concat(sessions,axis=1)
+occpancy = res.sum(axis=1)
+#%%
