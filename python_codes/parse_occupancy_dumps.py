@@ -11,6 +11,7 @@ Created on Thu Dec 21 22:10:15 2017
 import numpy as np
 import pandas as pd
 from datetime import datetime
+from collections import defaultdict
 
 fl = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/data_subset.json"
 #%%
@@ -68,8 +69,6 @@ with open(fl) as infile:
 unique_traps = np.unique(traps)   
 print(unique_traps)
 #%% Create dataframe of required information
-#took 2 hours to get data of 5 days, read till line number 1206104
-# second time parsed till line 1339137 in 30 minutes
 packet_count = 0
 df = pd.DataFrame()
 with open(fl) as infile:
@@ -102,7 +101,8 @@ with open(fl) as infile:
          # break
 filepath = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv"
 df.to_csv(filepath)
-#%% Use df to get occupancy stats
+#%% Now Use df to get occupancy stats
+# this cell reads and formats columns for further processing
 df = pd.read_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv",dtype={'trap_AP':str,'trap_client':str,'trap_type':str,'session_start':datetime,'session_end':datetime}) 
 
 df_BH = df[df.trap_AP.str.startswith('BH')]
@@ -110,27 +110,26 @@ df_BH.session_start = pd.to_datetime(df_BH.session_start)
 df_BH.session_end = pd.to_datetime(df_BH.session_end)
 df_BH.session_start = df_BH.session_start.apply(lambda x:x.round('T'))
 #%%
-time_seq  = pd.date_range('2017-07-01',periods = 120, freq ='T')
-
-client_count  = []
-for tm in time_seq:
-  count = 0
-  for key,entry in df_BH.iterrows():
-    if tm >= entry['session_start'] and tm <= entry['session_end']:
-      count = count + 1
-      print(count)
-    if tm < entry['session_start'] or tm > entry['session_end']:
-      break
-  client_count.append(count)
-  dfc = pd.DataFrame(client_count,index=time_seq)
-#%%
-seq1 =  pd.date_range('2017-07-01',periods = 60, freq ='T')
-seq2 =  pd.date_range('2017-07-01',periods = 120, freq ='T')
-#%%
+# This cell genertes 1's till users session end. Later in another cell I perfrom addition across users at specific time stamp
+df_BH = df_BH[df_BH['session_end'].notnull()]  # removes entries with missing endTs
 sessions = []
 for key,entry in df_BH.iterrows():
   seq = pd.Series(1,pd.date_range(start= entry['session_start'],end = entry['session_end'], freq ='T'))
   sessions.append(seq)
-res = pd.concat(sessions,axis=1)
-occpancy = res.sum(axis=1)
+#%%This cell creats a list of groups corresponding to series of different users
+c = [entry.groupby(entry.index.date) for entry in sessions]
+
+#%% This cell creates a dictionary where a key corresponds to a date so each key contains data of single day
+def_dic = defaultdict(list)
+for i in c:
+  for k in i.groups:
+    def_dic[k].append(i.get_group(k))
 #%%
+# This cell perfoms summation across active users at a timestamp
+res = []
+for k,item in def_dic.items():
+  print(k)
+  temp = pd.concat(item,axis=1).sum(axis=1)
+  res.append(temp)
+occu = pd.concat(res,axis=0).sort_index()
+occu.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/occupancy_boyshostel.csv")
