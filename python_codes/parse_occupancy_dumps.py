@@ -15,8 +15,8 @@ from collections import defaultdict
 
 fl = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/data_subset.json"
 
-#%%
-
+#%% 
+#In this cell, I read a part of big json file , save the packets foor the analysis
 count = 0
 lis = []
 with open(fl) as infile:
@@ -53,20 +53,9 @@ print(unique_traps)
  'ciscoLwappDot11ClientDisassocDataStatsTrap'
  'ciscoLwappDot11ClientMovedToRunState' 'ciscoLwappDot11ClientSessionTrap'
  'ciscoLwappSiIdrDevice']
-#%% Find all packets of a single day and then store them building wise
 
-count = 0
-traps = []
-with open(fl) as infile:
-    for line in infile:
-        #print(line)
-        traps.append(eval(line)['oid'])
-        count = count + 1
-        if count == 1571:
-          break
-unique_traps = np.unique(traps)   
-print(unique_traps)
 #%% Create dataframe of required information
+# Caputure only required packet. It contains whole information required
 packet_count = 0
 df = pd.DataFrame()
 with open(fl) as infile:
@@ -86,7 +75,7 @@ with open(fl) as infile:
           else:
             temp['session_end'] = float('nan')
           df = df.append(temp,ignore_index=True)
-         
+#  we dropped collecting these packets becasue they wer missing for most of the sessions
 #        elif packet['oid'] == 'bsnDot11StationDeauthenticate' :
 #          temp = {}
 #          temp['trap_type'] = packet['oid']
@@ -99,14 +88,15 @@ with open(fl) as infile:
          # break
 filepath = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv"
 df.to_csv(filepath)
-#%% Now Use df to get occupancy stats
+#%% Now Use dataframe obtained in previous steps to get occupancy stats
+# Mostly I read it from drive, because initial steps take time to compute things
 # this cell reads and formats columns for further processing
 df = pd.read_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/July2017_5days_second_attempt.csv",dtype={'trap_AP':str,'trap_client':str,'trap_type':str,'session_start':datetime,'session_end':datetime}) 
 
-df_BH = df[df.trap_AP.str.startswith('BH')]
-df_BH.session_start = pd.to_datetime(df_BH.session_start)
+df_BH = df[df.trap_AP.str.startswith('BH')] # get building specific packets
+df_BH.session_start = pd.to_datetime(df_BH.session_start) # convert string to datetime
 df_BH.session_end = pd.to_datetime(df_BH.session_end)
-df_BH.session_start = df_BH.session_start.apply(lambda x:x.round('T'))
+df_BH.session_start = df_BH.session_start.apply(lambda x:x.round('T')) # round seconds to minutes , makes calculation easier
 #%%
 # This cell genertes 1's till users session end. Later in another cell I perfrom addition across users at specific time stamp
 df_BH = df_BH[df_BH['session_end'].notnull()]  # removes entries with missing endTs
