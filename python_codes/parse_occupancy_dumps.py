@@ -14,9 +14,7 @@ from datetime import datetime
 from collections import defaultdict
 
 fl = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/data_subset.json"
-#%%
 
- num_lines = sum(1 for line in open(fl)) # get total number of lines or records in a file 11962709
 #%%
 
 count = 0
