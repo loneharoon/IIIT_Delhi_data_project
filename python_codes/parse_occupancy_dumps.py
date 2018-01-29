@@ -121,3 +121,6 @@ for k,item in def_dic.items():
   res.append(temp)
 occu = pd.concat(res,axis=0).sort_index()
 occu.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/occupancy_boyshostel.csv")
+#%%
+df =pd.read_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/occupancy_boyshostel.csv",index_col=0)
+df.index = pd.to_datetime(df.index)
