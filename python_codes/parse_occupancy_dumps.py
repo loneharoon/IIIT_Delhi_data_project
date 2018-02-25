@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-This script will parse IIITD occupancy dumps
+
+This is the first script when I started doing work on SNMP traps. It was only for understanding purpose. please read remaining scripts to understand the project
 Created on Thu Dec 21 22:10:15 2017
 
 @author: haroonr
