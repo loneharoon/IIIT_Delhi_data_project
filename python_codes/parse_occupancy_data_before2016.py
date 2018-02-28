@@ -24,20 +24,27 @@ df.columns = ["device_id",'client_id','timestamp','acces_point','trap']
 df.timestamp = pd.to_datetime(df.timestamp)
 bh_df = df[df.acces_point.str.startswith('BH')]
 bh_df.sort_values(by='timestamp',inplace=True)
-p1 = bh
+p1 = bh_df
 p1.index = p1.timestamp
-p1.groupby(p1.index.date)
-
-
-
-gp_obj = bh_df.groupby(bh_df.client_id)
+p2 = p1.groupby(p1.index.date) # contains day wise data
+#%%
+day_result={}
+for day,traps_seq in p2:
+  print(day)
+  gp_obj = traps_seq.groupby(traps_seq.client_id)
+  connections = []
+  for client, readings in gp_obj:
+    print (client)
+    temp = compute_connection_sequence_of_single_client(readings)
+    connections.append(temp)
+  day_result[day] = pd.concat(connections,axis=1)
 #%%
 #ob = gp_obj.get_group(4665)
-connections = []
-for key,ob in gp_obj:
-  print (key)
-  temp = compute_connection_sequence_of_single_client(ob)
-  connections.append(temp)
+#connections = []
+#for key,ob in gp_obj:
+#  print (key)
+#  temp = compute_connection_sequence_of_single_client(ob)
+#  connections.append(temp)
 #%%
 #for key,ob in gp_obj.items():
 def compute_connection_sequence_of_single_client(ob):
