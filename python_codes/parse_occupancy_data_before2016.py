@@ -22,11 +22,12 @@ df = pd.read_csv(fl)
 df.drop(['Unnamed: 0'],axis=1,inplace=True)
 df.columns = ["device_id",'client_id','timestamp','acces_point','trap']
 df.timestamp = pd.to_datetime(df.timestamp)
+
 bh_df = df[df.acces_point.str.startswith('BH')]
 bh_df.sort_values(by='timestamp',inplace=True)
 p1 = bh_df
 p1.index = p1.timestamp
-p2 = p1.groupby(p1.index.date) # contains day wise data
+p2 = p1.groupby(p1.index.month) # contains day wise data
 #%%
 day_result={}
 for day,traps_seq in p2:
@@ -38,6 +39,27 @@ for day,traps_seq in p2:
     temp = compute_connection_sequence_of_single_client(readings)
     connections.append(temp)
   day_result[day] = pd.concat(connections,axis=1)
+#%%
+import pickle
+fl = open("tempresult.pkl",'wb')
+pickle.dump(day_result,fl)
+fl.close()
+#%%
+import pickle
+fl = open("tempresult.pkl",'rb')
+res =pickle.load(fl)
+fl.close()
+#%%
+k = res[datetime.date(2014, 4, 7)].sum(axis=1)
+k.plot()
+#%%
+mysortedkeys =sorted(res.keys())
+resultser = []
+for i in range(len(mysortedkeys)):
+  resultser.append(res[mysortedkeys[i]].sum(axis=1))
+pp = pd.concat(resultser,axis=0)
+pp.plot()
+
 #%%
 #ob = gp_obj.get_group(4665)
 #connections = []
