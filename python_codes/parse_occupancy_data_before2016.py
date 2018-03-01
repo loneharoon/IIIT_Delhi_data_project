@@ -11,64 +11,8 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from collections import defaultdict
-
-#fl = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/occupancy_dump_before2016.csv"
-
-#df_sub = df.iloc[:3240704]
-#df_sub.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/subset_2014.csv")
-fl = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/subset_2014.csv"
+from collections import OrderedDict
 #%%
-df = pd.read_csv(fl)
-df.drop(['Unnamed: 0'],axis=1,inplace=True)
-df.columns = ["device_id",'client_id','timestamp','acces_point','trap']
-df.timestamp = pd.to_datetime(df.timestamp)
-
-bh_df = df[df.acces_point.str.startswith('BH')]
-bh_df.sort_values(by='timestamp',inplace=True)
-p1 = bh_df
-p1.index = p1.timestamp
-p2 = p1.groupby(p1.index.month) # contains day wise data
-#%%
-day_result={}
-for day,traps_seq in p2:
-  print(day)
-  gp_obj = traps_seq.groupby(traps_seq.client_id)
-  connections = []
-  for client, readings in gp_obj:
-    print (client)
-    temp = compute_connection_sequence_of_single_client(readings)
-    connections.append(temp)
-  day_result[day] = pd.concat(connections,axis=1)
-#%%
-import pickle
-fl = open("tempresult.pkl",'wb')
-pickle.dump(day_result,fl)
-fl.close()
-#%%
-import pickle
-fl = open("tempresult.pkl",'rb')
-res =pickle.load(fl)
-fl.close()
-#%%
-k = res[datetime.date(2014, 4, 7)].sum(axis=1)
-k.plot()
-#%%
-mysortedkeys =sorted(res.keys())
-resultser = []
-for i in range(len(mysortedkeys)):
-  resultser.append(res[mysortedkeys[i]].sum(axis=1))
-pp = pd.concat(resultser,axis=0)
-pp.plot()
-
-#%%
-#ob = gp_obj.get_group(4665)
-#connections = []
-#for key,ob in gp_obj:
-#  print (key)
-#  temp = compute_connection_sequence_of_single_client(ob)
-#  connections.append(temp)
-#%%
-#for key,ob in gp_obj.items():
 def compute_connection_sequence_of_single_client(ob):
   connection = pd.Series() # dummy initialization
   df_connect = ob[ob.trap==1].timestamp.tolist()
@@ -101,15 +45,47 @@ def compute_connection_sequence_of_single_client(ob):
           if candidate_size ==10: # lets limit number of connect traps to 10, if we don't find then we give up and ffind pair for the next one
             break
       except:
-        print("something went wrong when value of i was {}".format(i))
+        print()
+        #print("something went wrong when value of i was {}".format(i))
   try:
     connection = pd.concat(sessions,axis=0)
     connection = connection[~connection.index.duplicated()] # remove duplicates
   except:
-    print("No connection sequenence was found for the input client")
+    print()
+    #print("No connection sequenence was found for the input client")
   return connection
-      
-#%%  temps
-dts1= pd.to_datetime("2014-02-20 14:00:00")
-dts2= pd.to_datetime("2014-02-20 21:17:00")
-temp = ob[((ob.timestamp>dts1) & (ob.timestamp<dts2))]
+
+#%%
+#df_sub.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/subset_2014.csv")
+#fl = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/occupancy_dump_before2016.csv"
+#fl = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/subset_2014.csv"
+fl= "/home/hrashid/occupancy_files/occupancy_dump_before2016.csv"
+save_dir = "/home/hrashid/occupancy_files/digvijay_dump_results/"
+#%%
+df = pd.read_csv(fl)
+df.drop(['Unnamed: 0'],axis=1,inplace=True)
+df.columns = ["device_id",'client_id','timestamp','acces_point','trap']
+buildings = ['BH','GH','DB','ACB','LCB','LB','SRB']
+
+for build in buildings:
+  print('processing {} data'.format(build))
+  bh_df = df[df.acces_point.str.startswith(build)]
+  bh_df.timestamp = pd.to_datetime(bh_df.timestamp)
+  bh_df.sort_values(by='timestamp',inplace=True)
+  bh_df.index = bh_df.timestamp # important for some next operation
+  bh_group = bh_df.groupby([bh_df.index.year, bh_df.index.month]) # contains day wise data
+  
+  day_result = OrderedDict()
+  for day,traps_seq in bh_group:
+    print(day)
+    gp_obj = traps_seq.groupby(traps_seq.client_id)
+    connections = []
+    for client, readings in gp_obj:
+      temp = compute_connection_sequence_of_single_client(readings)
+      connections.append(temp)
+    day_result[day] = pd.concat(connections,axis=1)
+  result_months = []
+  for i in day_result.keys():
+    result_months.append(day_result[i].sum(axis=1))
+  result_building = pd.concat(result_months,axis=0)
+  result_building.to_csv(save_dir + build + ".csv")
