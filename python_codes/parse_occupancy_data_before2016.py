@@ -45,13 +45,13 @@ def compute_connection_sequence_of_single_client(ob):
           if candidate_size ==10: # lets limit number of connect traps to 10, if we don't find then we give up and ffind pair for the next one
             break
       except:
-        print()
+        pass
         #print("something went wrong when value of i was {}".format(i))
   try:
     connection = pd.concat(sessions,axis=0)
     connection = connection[~connection.index.duplicated()] # remove duplicates
   except:
-    print()
+    pass
     #print("No connection sequenence was found for the input client")
   return connection
 
@@ -89,3 +89,24 @@ for build in buildings:
     result_months.append(day_result[i].sum(axis=1))
   result_building = pd.concat(result_months,axis=0)
   result_building.to_csv(save_dir + build + ".csv")
+  
+ #%% Module to rectify data at day boundaries
+build_sub = result_building.resample('10 T',label='right',closed='right').max()
+start_minutes = "23:30:00"
+end_minutes = "00:30:00"
+boundary_values = build_sub.between_time(start_minutes,end_minutes,include_start=True,include_end=True)
+# forward timestamp by 30 minutes temporarily; required for grouping
+temp_index = (boundary_values.index +  pd.Timedelta(30, unit='M')).floor('d')
+boundary_values_gps = boundary_values.groupby(temp_index) 
+newseries = []
+for ind, obs in boundary_values_gps:
+  #case when data is already missing
+  if (np.isnan(obs[0]) or (np.isnan(obs[-1]))):
+    pass
+  else: # when we want to rectify data
+    obs[1:-1] = float('nan')
+    obs.interpolate(method='linear',inplace=True)
+  newseries.append(obs)
+res = pd.concat(newseries)
+build_sub[res.index] = res.values
+build_sub.plot()  
