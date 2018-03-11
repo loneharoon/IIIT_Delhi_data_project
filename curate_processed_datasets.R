@@ -1,3 +1,4 @@
+
 # IN this script we process each dataset separtely 
 # steps done: remove energy column, remove rows with entire NA values, round values to 5 decimal places, convert timestamps to unix format.
 # IMPORTANT NOTE: In files library, lecture, mess and boys_ups there are some unknnown inconsitency which creates problems so a solution is to identify the dates usually last dates of dataset and remove them before processing further.
@@ -8,22 +9,26 @@ library(data.table)
 
 create_version_2_of_dataset <- function() {
   # this function exclusiely creates version 2 of the dataset
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed/"
-  meter <- "girls_hostel_ups.csv"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed/after_july7/"
+  meter <- "transformer_1.csv"
   data <- fread(paste0(def_path,meter))
   # the next step is applied only for the files: library, lecture, mess and boys_ups,girls_ups
-  data <- data[1:(2056320),]
+  #data <- data[1:(2056320),]
   data_xts <- xts(data[,2:ncol(data)],fasttime::fastPOSIXct(data$timestamp)-19800)
-  start_date <- as.POSIXct("2013-08-10")
-  end_date <- as.POSIXct("2017-07-07 23:59:59")
+  
+  start_date <- as.POSIXct("2017-07-08")
+  #start_date <- as.POSIXct("2017-06-26") # library
+  end_date <- as.POSIXct("2017-12-31 23:59:59")
   xts_sub <- data_xts[paste0(start_date,"/",end_date)]
   xts_sub <- xts_sub[,!colnames(xts_sub)%in%c("energy")] # remove energy column
   na_rows <- apply(xts_sub,1,function(x) all(is.na(x)))
   xts_without_NA_rows <- xts_sub[!na_rows,] 
   dframe <- data.frame(timestamp=index(xts_without_NA_rows),coredata(xts_without_NA_rows))
   dframe$timestamp <- as.numeric(dframe$timestamp)
-  save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
-  # write.csv(round(dframe,5),paste0(save_path,meter),row.names=FALSE)
+  save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/after_july7/"
+  write.csv(round(dframe,5),paste0(save_path,meter),row.names=FALSE)
+  
+  
   t2 <- 2056966
   t1 <- t2 - 1440 * 1
   data[t1:t2]$timestamp
@@ -34,16 +39,23 @@ aggregate_one_parameter_of_all_buildings <- function() {
   # this function does two things:
   # create a CSV contining only power data of all buildings
   # create csv showing which points are missing and which are there  
-  path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/"
   fl <- list.files(path,pattern = "*.csv")
   
   df_files <- lapply(fl,function(x) {
-    data <- fread(paste0(path,x),select=c("timestamp","power"))
+    data <- fread(paste0(path,x), select = c("timestamp","power"))
     #tbl_data <- tbl_df(data) %>% mutate(timestamp = as.POSIXct(data$timestamp,origin = "1970-01-01", tz="Asia/Kolkata"))
     tbl_data <- tbl_df(data) %>% mutate(timestamp = as.POSIXct(data$timestamp,origin = "1970-01-01"))
+    attr(tbl_data$timestamp, "tzone") <- "Asia/kolkata"
     return(tbl_data)
   })
-  dummy_year <- create_NA_timeseries_tibble('2013-08-10','2017-07-07 23:59:59','1 mins')
+  lapply(df_files,head)
+  lapply(df_files,tail)
+  
+  dummy_year <- create_NA_timeseries_tibble('2013-08-10','2017-12-31 23:59:00','1 mins')
+  # for transformers
+  dummy_year <- create_NA_timeseries_tibble('2013-11-26','2017-12-31 23:59:00','1 mins')
+  attr(dummy_year$timestamp, "tzone") <- "Asia/kolkata"
   for (i in 1:length(df_files)){
     temp <- full_join(dummy_year,df_files[[i]],by="timestamp")
     dummy_year <- temp
@@ -53,15 +65,17 @@ aggregate_one_parameter_of_all_buildings <- function() {
   source("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/R_codesDirectory/R_Codes/Data_wrangling/wrangle_data.R")
   data_xts <- mytbl_xts(temp)
   build_names <- c("Academic","Boys_main","Boys_backup","Facilities","Girls_main","Girls_backup","Lecture","Library","Mess")
+  #for tranformer
+  # build_names <- c('transfomer_1','transfomer_2','transfomer_3')
   colnames(data_xts) <- build_names
-  #path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
-  write.csv(data.frame(timestamp=index(data_xts),coredata(data_xts)),paste0(path,"all_buildings_power.csv"),row.names = FALSE)
+  savehere <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/"
+  # write.csv(data.frame(timestamp=index(data_xts),coredata(data_xts)),paste0(savehere,"all_transformer_power.csv"),row.names = FALSE)
   
   
   # CREATE CSV WHICH SHOWS WHICH DATA POINTS ARE PRESENT AND WHICH ONE ARE MISSING
   data_present_status <- ifelse(is.na(data_xts),0,1)
   df_status <- data.frame(timestamp=index(data_xts),data_present_status)
-  #write.csv(df_status,paste0(path,"data_present_status.csv"),row.names = FALSE)
+  # write.csv(df_status,paste0(savehere,"data_present_status.csv"),row.names = FALSE)
 }
 
 sqeeze_datasets <- function() {
@@ -81,8 +95,8 @@ sqeeze_datasets <- function() {
 sqeeze_all_builidngs_power_datasets <- function() {
   # this function is used to squeeze power reading of all the buildings, i.e., convert timestamp to unix timeformat and remove rows which contain NA's
   #def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/"
-  meter <- "all_transformer_power.csv"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
+  meter <- "all_buildings_power.csv"
   data <- fread(paste0(def_path,meter))
   data$timestamp <- as.POSIXct(data$timestamp,origin = "1970-01-01", tz="Asia/Kolkata")
   # start_date <- as.POSIXct("2013-08-10")
@@ -95,8 +109,8 @@ sqeeze_all_builidngs_power_datasets <- function() {
   dframe <- data.frame(timestamp=index(xts_without_NA_rows),coredata(xts_without_NA_rows))
   dframe$timestamp <- as.numeric(dframe$timestamp)
   #save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
-  save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/"
-  #write.csv(dframe,paste0(save_path,"all_transformer_power_UTC_timstamp.csv"),row.names=FALSE)
+  save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
+  # write.csv(dframe,paste0(save_path,"all_buildings_power_Unix_timstamp.csv"),row.names=FALSE)
 }
 
 
@@ -109,15 +123,15 @@ show_data_presence_plot<- function(){
   data <- fread(paste0(def_path,meter)) 
   data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
   temp <- data[data$timestamp <= as.POSIXct("2013-11-10 23:59:59"),]
-   temp <- as.data.frame(temp)
-   mulfactor <- 1:(NCOL(temp)-1)
-   for (i in 2:NCOL(temp)) {
-   temp[,i] <- temp[,i] * mulfactor[i-1] }
-   data_long <- reshape2::melt(temp,id.vars=c("timestamp"))
-   data_long$value <- ifelse(data_long$value==0,NA,data_long$value)
-   g <- ggplot(data_long,aes(timestamp,value,fill=variable)) + geom_line()
-   g <- g + scale_y_continuous(breaks= c(1:9))
- #  ggsave(filename = "mydemo.pdf",plot = g)
+  temp <- as.data.frame(temp)
+  mulfactor <- 1:(NCOL(temp)-1)
+  for (i in 2:NCOL(temp)) {
+    temp[,i] <- temp[,i] * mulfactor[i-1] }
+  data_long <- reshape2::melt(temp,id.vars=c("timestamp"))
+  data_long$value <- ifelse(data_long$value==0,NA,data_long$value)
+  g <- ggplot(data_long,aes(timestamp,value,fill=variable)) + geom_line()
+  g <- g + scale_y_continuous(breaks= c(1:9))
+  #  ggsave(filename = "mydemo.pdf",plot = g)
 }
 
 summarise_missing_data_plot<- function(){
@@ -133,11 +147,11 @@ summarise_missing_data_plot<- function(){
   temp_xts <- xts(temp[,-1],temp$timestamp)
   day_data <- split.xts(temp_xts,f="days",k=1)
   sumry_data <- lapply(day_data, function(x) {
-  #x <- day_data[[1]]
-  sumry <- apply(x,2,sum)
-  sumry <- ifelse(sumry <=1440/4, NA, 1)
-  return(xts(data.frame(t(sumry)),as.Date(index(x[1]),tz="Asia/Kolkata")))
-  #return(sumry)
+    #x <- day_data[[1]]
+    sumry <- apply(x,2,sum)
+    sumry <- ifelse(sumry <=1440/4, NA, 1)
+    return(xts(data.frame(t(sumry)),as.Date(index(x[1]),tz="Asia/Kolkata")))
+    #return(sumry)
   })
   sumry_data_xts <-  do.call(rbind,sumry_data)
   # Calculate uptime for each meter
@@ -152,8 +166,8 @@ summarise_missing_data_plot<- function(){
   for (i in 2:NCOL(temp)) {
     temp[,i] <- temp[,i] * mulfactor[i-1] }
   data_long <- reshape2::melt(temp,id.vars=c("timestamp"))
- #  data_long$value <- ifelse(data_long$value==0,NA,data_long$value)
- names <- colnames(sumry_data_xts)
+  #  data_long$value <- ifelse(data_long$value==0,NA,data_long$value)
+  names <- colnames(sumry_data_xts)
   g <- ggplot(data_long,aes(timestamp,value,color=variable)) + geom_line()
   g <- g + theme(axis.text = element_text(color="black"),axis.text.y = element_blank(),axis.ticks.y = element_blank(), legend.title = element_blank(), legend.position = "none" )+ labs(x= " ", y="Meter") + scale_x_date(breaks=scales::date_breaks("6 month"),labels = scales::date_format("%b-%Y"))
   g <- g + annotate("text",x=as.Date("2013-08-30"),y=seq(1.3,9.3,1),label=names)
@@ -163,7 +177,7 @@ summarise_missing_data_plot<- function(){
   setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
   # ggsave(filename="data_missing_plot_2.pdf",height = 5,width = 10,units = c("in"))
 }
-   
+
 summarise_missing_data_plot_WITH_TRANsformer<- function(){
   # this function is used to plot the plot of paper which shows the days on which quater of the data is missing by gaps. This version also shows the transformer data
   library(ggplot2)
@@ -363,7 +377,7 @@ plot_energy_and_temperature_data <- function(){
   # energy = power * time
   # energy = sum(power*1/60)*1/1000 [kWH]
   energy_month <- power_sum/60000
-
+  
   
   weather_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/weatherdata_PROCESSED/"
   dirs <- list.files(weather_path,recursive = TRUE,include.dirs = TRUE,pattern = "*FULL.csv")
@@ -556,4 +570,33 @@ plot_line_graph_hour_wise_data<- function(){
   setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
   # 
   # ggsave(filename="day_hour_usage_plot_2_3.pdf",height = 8,width = 11,units = c("in"))
+}
+
+create_version_3_of_dataset <- function() {
+  # this function combines data of two releases, pre july 2017 and after july 2017
+  root_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  branch_path <- paste0(root_path,'after_july7/')
+  #meter <- "transformer_3.csv"
+  meters <-  c( 
+    "boys_hostel_mains.csv",
+    "girls_hostel_mains.csv",
+    "acad_build_mains.csv",
+    "lecture_build_mains.csv",
+    "library_build_mains.csv",
+    "mess_build_mains.csv",
+    "facilities_build_mains.csv",
+    "boys_hostel_ups.csv",
+    "girls_hostel_ups.csv"
+    #  "transformer_1.csv",
+    #  "transformer_2.csv",
+    # "transformer_3.csv",
+  )
+  for (i in 1:length(meters)){ 
+    meter <- meters[i]
+    prejuly2017_data <- fread(paste0(root_path,meter))
+    postjuly2017_data <- fread(paste0(branch_path,meter))
+    concat_df <- rbind(prejuly2017_data,postjuly2017_data)
+    save_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
+    write.csv(concat_df,paste0(save_path,meter),row.names=FALSE)
+  }  
 }
