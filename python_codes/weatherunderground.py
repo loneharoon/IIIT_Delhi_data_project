@@ -61,11 +61,50 @@ def download_weather_data(station_id,start_date,end_date,savefilename):
         writer.writerow(row)
       sleep(30) # in seconds, limit is 10 calls per minute
       datex += datetime.timedelta(days=1) 				 
+
+#%% download data of pending dates [next two cells deal with that only]
+key="aca4914ccfcb186d" # put your key here3
+api_key = key
+station_id ='VIDP'     
+pending_dates = [datetime.date(2016,4,1),datetime.date(2016,5,11),datetime.date(2016,5,18),
+                 datetime.date(2016,5,28),datetime.date(2016,6,15),datetime.date(2016,8,1),
+                datetime.date(2016,11,23)]
+headers = ['date','temperature','humidity','wind speed','wind direction'] # edit these as required
+ 
+day = []
+for datex in pending_dates:
+  date_string = datex.strftime('%Y%m%d')
+  try:
+    url = ("http://api.wunderground.com/api/{}/history_{}/q/{}.json".format(api_key,date_string,station_id))
+    data = requests.get(url).json()
+    for history in data['history']['observations']:
+      row = []
+      row.append(str(history['date']['pretty']))
+      row.append(str(history['tempm'])) 
+      row.append(str(history['hum']))
+      row.append(str(history['wspdm']))
+      row.append(str(history['wdird']))
+      day.append(row)
+  except:
+      print('no data for day {}'.format(datex))
+  sleep(30) 
 #%%
-station_id = "VIDD"
-start_date = datetime.date(2018,2,20)
-date_string = start_date.strftime('%Y%m%d')
-url = ("http://api.wunderground.com/api/{}/history_{}/q/{}.json".format(api_key,date_string,station_id))
-data = requests.get(url).json()
-#%%
+filename = "year2016_VIDP_station.csv"
+dframe = pd.DataFrame.from_records(day)
+dframe.columns = headers
+dframe.index = dframe.date
+dframe.index = pd.to_datetime(dframe.index)
+dframe.drop('date',axis=1,inplace=True)
+save_path = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/weather/missing_days/"
+dframe.to_csv(save_path+filename)
+#%% few of pending days
+pending_dates = [datetime.date(2017,2,15),datetime.date(2017,3,9),datetime.date(2017,4,15),
+                 datetime.date(2017,5,8),datetime.date(2017,5,19),datetime.date(2017,7,19),
+                datetime.date(2017,9,12),datetime.date(2017,10,5),datetime.date(2017,10,7),
+                 datetime.date(2017,10,10),datetime.date(2017,11,21),datetime.date(2017,11,23),
+                 datetime.date(2017,11,30)]
+ 
+pending_dates = [datetime.date(2016,4,1),datetime.date(2016,5,11),datetime.date(2016,5,18),
+                 datetime.date(2016,5,28),datetime.date(2016,6,15),datetime.date(2016,8,1),
+                datetime.date(2016,11,23)]
 
