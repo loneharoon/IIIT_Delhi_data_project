@@ -61,7 +61,7 @@ def compute_connection_sequence_of_single_client(ob):
 #fl = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/subset_2014.csv"
 fl= "/home/hrashid/occupancy_files/occupancy_dump_before2016.csv"
 save_dir = "/home/hrashid/occupancy_files/digvijay_dump_results/"
-#%%
+#%% This block was run on Ubuntu server
 df = pd.read_csv(fl)
 df.drop(['Unnamed: 0'],axis=1,inplace=True)
 df.columns = ["device_id",'client_id','timestamp','acces_point','trap']
@@ -73,7 +73,7 @@ for build in buildings:
   bh_df.timestamp = pd.to_datetime(bh_df.timestamp)
   bh_df.sort_values(by='timestamp',inplace=True)
   bh_df.index = bh_df.timestamp # important for some next operation
-  bh_group = bh_df.groupby([bh_df.index.year, bh_df.index.month]) # contains day wise data
+  bh_group = bh_df.groupby([bh_df.index.date]) # contains day wise data
   
   day_result = OrderedDict()
   for day,traps_seq in bh_group:
@@ -91,6 +91,16 @@ for build in buildings:
   result_building.to_csv(save_dir + build + ".csv")
   
  #%% Module to rectify data at day boundaries
+ # after obtaining results from Ubuntu server, I rectify boundaries values here and save final dataset at 10 minutes rate
+readir = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/digvijay_dump_results/"
+building = "SRB.csv"
+df = pd.read_csv(readir + building)
+ds = pd.Series(data = df.iloc[:,1].values, index = df.iloc[:,0].values)
+ds.index = pd.to_datetime(ds.index)
+#result_building = ds[ :'2015-11-30']
+result_building = ds
+#%
+ 
 build_sub = result_building.resample('10 T',label='right',closed='right').max()
 start_minutes = "23:30:00"
 end_minutes = "00:30:00"
@@ -109,4 +119,7 @@ for ind, obs in boundary_values_gps:
   newseries.append(obs)
 res = pd.concat(newseries)
 build_sub[res.index] = res.values
-build_sub.plot()  
+build_sub = round(build_sub, 0) # interpolation results in fractions
+savedirectory = readir + "processed_stage_10minutely/"
+build_sub.to_csv(savedirectory+building)
+#build_sub.plot()  
