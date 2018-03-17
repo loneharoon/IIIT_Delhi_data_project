@@ -5,6 +5,7 @@
 rm(list=ls())
 library(xts)
 library(data.table)
+Sys.setenv(TZ='Asia/Kolkata')
 
 
 create_version_2_of_dataset <- function() {
@@ -118,7 +119,7 @@ show_data_presence_plot<- function(){
   # this function is used to show missing data using default minutely data.
   library(ggplot2)
   library(data.table)
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
   meter <- "data_present_status.csv"
   data <- fread(paste0(def_path,meter)) 
   data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
@@ -139,7 +140,7 @@ summarise_missing_data_plot<- function(){
   library(ggplot2)
   library(data.table)
   library(xts)
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
   meter <- "data_present_status.csv"
   data <- fread(paste0(def_path,meter)) 
   data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
@@ -149,16 +150,16 @@ summarise_missing_data_plot<- function(){
   sumry_data <- lapply(day_data, function(x) {
     #x <- day_data[[1]]
     sumry <- apply(x,2,sum)
-    sumry <- ifelse(sumry <=1440/4, NA, 1)
-    return(xts(data.frame(t(sumry)),as.Date(index(x[1]),tz="Asia/Kolkata")))
+    sumry <- ifelse(sumry <= 1440/4, NA, 1)
+    return(xts(data.frame(t(sumry)), as.Date(index(x[1]), tz = "Asia/Kolkata")))
     #return(sumry)
   })
   sumry_data_xts <-  do.call(rbind,sumry_data)
   # Calculate uptime for each meter
   #apply(sumry_data_xts,2,sum,na.rm=TRUE)/1428 #[1428 is the total no. of days]
   #    Academic    Boys_main  Boys_backup   Facilities   Girls_main Girls_backup      Lecture      Library         Mess   #   0.9880952    0.7261905    0.7331933    0.8928571    0.7002801    0.9985994    0.9880952    0.7240896    0.8725490
-  uptime<- apply(sumry_data_xts,2,sum,na.rm=TRUE)
-  # Next line has been counted manually, 1428 represents total no. of days, subtracted numbers from 1428 shows that corresponding metter started or stopped eary by the mentioned days
+  uptime <- apply(sumry_data_xts,2,sum,na.rm=TRUE)
+  # Next line has been counted manually, 1428 represents total no. of days, subtracted numbers from 1428 shows that corresponding meter started or stopped early by the mentioned days
   divisor  <- c(1428,1428,1428,1428-97,1428,1428,1428,1428-25,1428-45)
   uptime <-round(as.numeric(uptime/divisor)*100,1)
   temp <- data.frame(timestamp=index(sumry_data_xts),coredata(sumry_data_xts))
@@ -183,15 +184,17 @@ summarise_missing_data_plot_WITH_TRANsformer<- function(){
   library(ggplot2)
   library(data.table)
   library(xts)
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
   meter <- "data_present_status.csv"
   data <- fread(paste0(def_path,meter)) 
   data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
-  temp <- data[data$timestamp <= as.POSIXct("2017-07-07 23:59:59"),]
+  temp <- data[data$timestamp <= as.POSIXct("2017-12-31 23:59:59"),]
   temp_xts <- xts(temp[,-1],temp$timestamp)
   #ARRANGE TRANSFORMER DATA##
-  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/data_present_status_transformer.csv"
+  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/data_present_status.csv"
   df_tran <-  fread(transformer_data)
+  df_tran$timestamp <- fasttime::fastPOSIXct(df_tran$timestamp)-19800
+  df_tran <- df_tran[df_tran$timestamp <= as.POSIXct("2017-12-31 23:59:59"),]
   df_tran_xts <- xts(df_tran[,-1], fasttime::fastPOSIXct(df_tran$timestamp) - 19800)
   colnames(df_tran_xts) <- c("Transformer_1","Transformer_2","Transformer_3")
   ########
@@ -207,11 +210,12 @@ summarise_missing_data_plot_WITH_TRANsformer<- function(){
   })
   sumry_data_xts <-  do.call(rbind,sumry_data)
   # Calculate uptime for each meter
-  #apply(sumry_data_xts,2,sum,na.rm=TRUE)/1428 #[1428 is the total no. of days]
+  # apply(sumry_data_xts,2,sum,na.rm=TRUE)/1428 #[1428 is the total no. of days]
   #    Academic    Boys_main  Boys_backup   Facilities   Girls_main Girls_backup      Lecture      Library         Mess   #   0.9880952    0.7261905    0.7331933    0.8928571    0.7002801    0.9985994    0.9880952    0.7240896    0.8725490
   uptime<- apply(sumry_data_xts,2,sum,na.rm=TRUE)
   # Next line has been counted manually, 1428 represents total no. of days, subtracted numbers from 1428 shows that corresponding metter started or stopped eary by the mentioned days
-  divisor  <- c(1428,1428,1428,1428-97,1428,1428,1428,1428-25,1428-45,1428-105,1428-105,1428-105)
+  #divisor  <- c(1428,1428,1428,1428-97,1428,1428,1428,1428-12,1428-45,1428-105,1428-105,1428-105) # first submitted version
+  divisor  <- c(1605,1605,1605,1605-97,1605,1605,1605,1605-12,1605-45,1605-105,1605-105,1605-105)
   uptime <-round(as.numeric(uptime/divisor)*100,1)
   temp <- data.frame(timestamp=index(sumry_data_xts),coredata(sumry_data_xts))
   mulfactor <- 1:(NCOL(temp)-1)
@@ -223,7 +227,7 @@ summarise_missing_data_plot_WITH_TRANsformer<- function(){
   g <- ggplot(data_long,aes(timestamp,value,color=variable)) + geom_line()
   g <- g + theme(axis.text = element_text(color="black"),axis.text.y = element_blank(),axis.ticks.y = element_blank(), legend.title = element_blank(), legend.position = "none" )+ labs(x= " ", y="Meter") + scale_x_date(breaks=scales::date_breaks("6 month"),labels = scales::date_format("%b-%Y"))
   g <- g + annotate("text",x=as.Date("2013-08-10"),y=seq(1.3,12.3,1),label=names,hjust=0)
-  g <- g + annotate("text",x=as.Date("2017-07-07"),y=seq(1.3,12.3,1),label=uptime)
+  g <- g + annotate("text",x=as.Date("2018-01-05"),y=seq(1.3,12.3,1),label=uptime)
   g <- g + scale_y_continuous(sec.axis = sec_axis(~./1, name = "Uptime (%)"  ))
   g
   setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
@@ -248,13 +252,13 @@ plot_facetted_histograms_of_Data_WITH_TRANsformer<- function(){
     y
   }
   
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
   meter <- "all_buildings_power.csv"
   data <- fread(paste0(def_path,meter)) 
   data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
   df_xts <- xts(data[,-1],data$timestamp)
   #ARRANGE TRANSFORMER DATA##
-  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/all_transformer_power.csv"
+  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/all_transformer_power.csv"
   df_tran <-  fread(transformer_data)
   df_tran_xts <- xts(df_tran[,-1], fasttime::fastPOSIXct(df_tran$timestamp) - 19800)
   colnames(df_tran_xts) <- c("Transformer_1","Transformer_2","Transformer_3")
@@ -270,10 +274,10 @@ plot_facetted_histograms_of_Data_WITH_TRANsformer<- function(){
   data_long <- data_long[,2:3]
   #data_long$value <- ifelse(data_long$value==0,NA,data_long$value)
   g <- ggplot(data_long,aes(value)) + geom_histogram(binwidth = 1) + facet_wrap(~Var2 ,scales = "free")
-  g <- g + labs(x="Power (kW)", y= "Count") + theme(axis.text = element_text(color = "black"),axis.text.y =  element_blank(),axis.title.y=element_blank(),axis.ticks.y = element_blank())
+  g <- g + labs(x="Power (kW)", y = "Count") + theme(axis.text = element_text(color = "black"))
   g
   setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
-  # ggsave(filename="data_histograms.pdf",height = 8,width = 12,units = c("in"))
+  # ggsave(filename="data_histograms_2.pdf",height = 8,width = 12,units = c("in"))
 }
 
 plot_facetted_histograms_of_Data<- function(){
@@ -281,7 +285,7 @@ plot_facetted_histograms_of_Data<- function(){
   library(ggplot2)
   library(data.table)
   library(xts)
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
   meter <- "all_buildings_power.csv"
   data <- fread(paste0(def_path,meter)) 
   data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
@@ -329,14 +333,14 @@ plot_histograms_hour_wise_data_WITH_TRANSFORMER<- function(){
   library(data.table)
   library(xts)
   library(dplyr)
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
   meter <- "all_buildings_power.csv"
   df <- fread(paste0(def_path,meter)) 
   df$timestamp <- fasttime::fastPOSIXct(df$timestamp)-19800
   df_xts <- xts(df[,-1],df$timestamp)
   
   #ARRANGE TRANSFORMER DATA##
-  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/all_transformer_power.csv"
+  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/all_transformer_power.csv"
   df_tran <-  fread(transformer_data)
   df_tran_xts <- xts(df_tran[,-1], fasttime::fastPOSIXct(df_tran$timestamp) - 19800)
   colnames(df_tran_xts) <- c("Transformer_1","Transformer_2","Transformer_3")
@@ -365,12 +369,12 @@ plot_energy_and_temperature_data <- function(){
   library(data.table)
   library(xts)
   library(dplyr)
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_2/"
+  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
   meter <- "all_buildings_power.csv"
   data <- fread(paste0(def_path,meter)) 
   data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
   start_date <- as.POSIXct("2013-08-10")
-  end_date <- as.POSIXct("2017-07-07 23:59:59")
+  end_date <- as.POSIXct("2017-12-31 23:59:59")
   data <- data[data$timestamp>=start_date & data$timestamp <= end_date,]
   data_xts <- xts(data[,-1],fasttime::fastPOSIXct(data$timestamp)-19800)
   power_sum <- apply.monthly(data_xts,apply,2, sum, na.rm=TRUE)
@@ -378,18 +382,26 @@ plot_energy_and_temperature_data <- function(){
   # energy = sum(power*1/60)*1/1000 [kWH]
   energy_month <- power_sum/60000
   
+  # following 2 lines used in firs submission
+  #weather_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/weatherdata_PROCESSED/"
+  #dirs <- list.files(weather_path,recursive = TRUE,include.dirs = TRUE,pattern = "*FULL.csv")
   
-  weather_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/weatherdata_PROCESSED/"
-  dirs <- list.files(weather_path,recursive = TRUE,include.dirs = TRUE,pattern = "*FULL.csv")
+  weather_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/weather/processed/"
+  dirs <- list.files(weather_path,recursive = FALSE,include.dirs = FALSE,pattern = "*.csv")
+  
+  
   weather_files <- lapply(dirs, function(x){
     df <- fread(paste0(weather_path,x))
-    df_xts <- xts(df[,-1],fasttime::fastPOSIXct(df$timestamp)-19800)
+    df$V1 <- as.POSIXct(df$V1,tz="Asia/kolkata",origin="1970-01-01")
+    df_xts <- xts(df[,-1],df$V1)
+    #df_xts <- xts(df[,-1],fasttime::fastPOSIXct(df$timestamp)-19800)
     return(df_xts)
   })
-  weather<- do.call(rbind,weather_files)
+  weather <- do.call(rbind,weather_files)
   weather_month <- apply.monthly(weather,mean)
   
-  temp <- data.frame(timestamp=index(energy_month),coredata(energy_month$Academic),coredata(weather_month$TemperatureC))
+  temp <- data.frame(timestamp = index(energy_month),coredata(energy_month$Academic),coredata(weather_month$temperature))
+  
   colnames(temp) <- c("timestamp","Energy","Temperature")
   #https://rpubs.com/MarkusLoew/226759
   p <- ggplot(temp,aes(timestamp,Energy)) + geom_histogram(aes(colour="Energy"),stat="Identity")
@@ -460,17 +472,20 @@ plot_energy_data_across_years <- function() {
   }
 }
 
-compute_campus_energy <- function(){
+
+plot_campus_energy_and_temperature <- function(){
   # this scipt is used to plot total consumption of the campus and the average temperature. It takes data from all the three transformers and plots the data.
   library(data.table)
   library(xts)
   library(ggplot2)
-  path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_2/all_transformer_power.csv"
+  Sys.setenv(TZ='Asia/Kolkata')
+  path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/all_transformer_power.csv"
   df <- fread(path,header = TRUE)
   df_xts <- xts(df[,-1],fasttime::fastPOSIXct(df$timestamp)-19800) # subtracting5:30 according to IST
   power_daily <- apply.daily(df_xts,apply,2, 
                              function(x){
-                               temp <- ifelse(any(is.na(x)),NA,sum(x))
+                               #temp <- ifelse(any(is.na(x)),NA,sum(x))
+                               temp <- sum(x,na.rm = TRUE)
                                return(temp)
                              })
   # energy = power * time
@@ -481,37 +496,44 @@ compute_campus_energy <- function(){
   energy_xts <- xts(as.numeric(energy_monthly),as.Date(row.names(energy_monthly) )) 
   plot(energy_xts)
   #weather data
-  weather_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/weatherdata_PROCESSED/"
-  dirs <- list.files(weather_path,recursive = TRUE,include.dirs = TRUE,pattern = "*FULL.csv")
+  
+  
+  weather_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/weather/processed/"
+  dirs <- list.files(weather_path,recursive = FALSE,include.dirs = FALSE,pattern = "*.csv")
   weather_files <- lapply(dirs, function(x){
     df <- fread(paste0(weather_path,x))
-    df_xts <- xts(df[,-1],fasttime::fastPOSIXct(df$timestamp)-19800)
+    df$V1 <- as.POSIXct(df$V1,tz="Asia/kolkata",origin="1970-01-01")
+    df_xts <- xts(df[,-1],df$V1)
+    #df_xts <- xts(df[,-1],fasttime::fastPOSIXct(df$timestamp)-19800)
     return(df_xts)
   })
+  
   weather<- do.call(rbind,weather_files)
-  weather_month <- apply.monthly(weather,mean)
+  weather_month <- apply.monthly(weather,mean,na.rm=TRUE)
   index(weather_month) <- as.Date(index(weather_month))
   index(weather_month) <- as.Date(index(weather_month))
   weather_month <- weather_month["2013-11-25/"]
-  temp2 <- data.frame(timestamp=index(energy_xts),coredata(energy_xts),coredata(weather_month$TemperatureC))
+  temp2 <- data.frame(timestamp=index(energy_xts),coredata(energy_xts),coredata(weather_month$temperature))
   colnames(temp2) <- c("timestamp","Energy","Temperature")
   # temp2$timestamp <- temp2$timestamp - 15 # shifting timestamp of mid of month
   #https://rpubs.com/MarkusLoew/226759
   temp3 <- temp2
   temp3$timestamp <- as.yearmon(temp3$timestamp)
-  temp3$category <- rep(c('cat1','cat2'),c(22,23))
-  temp3$category <- as.factor(temp3$category)
+  # temp3$category <- rep(c('cat1','cat2'),c(22,23))
+  #temp3$category <- as.factor(temp3$category)
+  
   p <- ggplot() 
-  p <- p + geom_line(data=temp3,aes(timestamp,y=Temperature*200,linetype="red"),colour="red")
   p <- p + geom_histogram(data=temp3,aes(timestamp,Energy,colour="black"),stat="Identity",bindwidth=10)
+  p <- p + geom_line(data=temp3,aes(timestamp,y=Temperature*200,linetype="red"),colour="red")
   p <- p + scale_x_yearmon(format ="%b-%Y",n=10)
   p <- p + scale_y_continuous(sec.axis = sec_axis(~./200, name = "Temperature"*"("~degree*"C)"  ))
   p <- p + scale_linetype_manual( labels="Temperature", values = "solid") 
   p <- p + labs(y = "Energy (kWh)", x = "") 
   p <- p + scale_colour_manual(name="", labels= "Energy", values = 'black')
-  p <- p+  guides(colour = guide_legend(override.aes = list(colour = "black", size = 1), order = 1), linetype = guide_legend(title = NULL, override.aes = list(linetype = "solid", colour = "red", size = 1),order = 2)) 
-  p <- p + theme(legend.key = element_rect(fill = "white", colour = NA),legend.spacing = unit(0, "lines"))
-  # ggsave(filename="campus_total_energy_and_temperature_2.pdf",height = 4,width = 10,units = c("in"))
+  p <- p + guides(colour = guide_legend(override.aes = list(colour = "black", size = 1), order = 1), linetype = guide_legend(title = NULL, override.aes = list(linetype = "solid", colour = "red", size = 1),order = 2)) 
+  p <- p + theme(legend.key = element_rect(fill = "white", colour = NA),legend.spacing = unit(0, "lines"),legend.position = c(0.1,0.85), legend.background = element_rect(fill = alpha('grey',0.1)))
+  p
+  # ggsave(filename="campus_total_energy_and_temperature_3.pdf",height = 4,width = 10,units = c("in"))
 }
 
 
