@@ -29,7 +29,7 @@ from datetime import date
 import os
 import requests # this library makes html requests much simpler
 from time import sleep
-key="" # put your key here3
+key = "aca4914ccfcb186d" # put your key here3
 api_key = key
 station_id ='VIDP' # VIDP is international airport while as VIDD is safdarjung airport
 start_date = datetime.date(2018,2,15)
