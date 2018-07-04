@@ -31,10 +31,10 @@ import requests # this library makes html requests much simpler
 from time import sleep
 key = "aca4914ccfcb186d" # put your key here3
 api_key = key
-station_id ='VIDP' # VIDP is international airport while as VIDD is safdarjung airport
+station_id ='IDELHINE8' # VIDP is international airport while as VIDD is safdarjung airport
 start_date = datetime.date(2018,2,15)
-end_date = datetime.date(2018,2,25)
-savefilename="//////////"
+end_date = datetime.date(2018,2,16)
+savefilename="mango_apple.csv"
 download_weather_data(station_id,start_date,end_date,savefilename)
 
 #%%
