@@ -40,7 +40,7 @@ dff.index = pd.to_datetime(dff.index)
 # remove duplicate entires
 dff['timestamp'] = dff.index.values
 res = dff[~dff.duplicated('timestamp')]
-res.drop(['timestamp'],axis=1,inplace=True)
+res.drop(['timestamp'],axis = 1,inplace = True)
 #%%  IN this cell, we combine VIDP and iiitd weather data
 #Keep only those timestamps in IIITD data which are in vidp data
 rr = dfsub[((dfsub.index.minute == 0) | (dfsub.index.minute == 30))]
