@@ -8,20 +8,7 @@ I use this script to download data from weather underground API
 """
 
 key="aca4914ccfcb186d"
-#%%%
 #%%
-from wunder import weather
-from time imort sleep
-#%%
-from pprint import pprint
-import arrow
-from WunderWeather import weather
-api_key = key
-location = 'MA/Bos'
-extractor = weather.Extract(api_key)
-date = arrow.get("20170601","YYYYMMDD")
-response = extractor.date(location,date.format('YYYYMMDD'))
-pprint(response.data)
 #%%
 import csv
 import datetime
@@ -31,10 +18,10 @@ import requests # this library makes html requests much simpler
 from time import sleep
 key = "aca4914ccfcb186d" # put your key here3
 api_key = key
-station_id ='IDELHINE8' # VIDP is international airport while as VIDD is safdarjung airport
-start_date = datetime.date(2018,2,15)
-end_date = datetime.date(2018,2,16)
-savefilename="mango_apple.csv"
+station_id ='VIDP' # VIDP is international airport while as VIDD is safdarjung airport
+start_date = datetime.date(2018,4,12)
+end_date = datetime.date(2018,4,12)
+savefilename="twelth_april.csv"
 download_weather_data(station_id,start_date,end_date,savefilename)
 
 #%%

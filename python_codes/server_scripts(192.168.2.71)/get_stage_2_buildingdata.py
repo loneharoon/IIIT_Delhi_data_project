@@ -8,7 +8,7 @@ Created on Sun Feb 25 08:53:33 2018
 @author: haroonr
 """
 import pandas as pd
-from datetime import datetime
+#from datetime import datetime
 from collections import defaultdict
 #%%
 
@@ -61,8 +61,8 @@ direc_path = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/"
 
 file_path = direc_path + month_name
 
-df = pd.read_csv(file_path,dtype={'trap_AP':str,'trap_clientIP':str,'trap_clientMAC':str,'trap_type':str,'session_start':datetime.datetime,'session_end':datetime.datetime}) 
-
+#df = pd.read_csv(file_path,dtype={'trap_AP':str,'trap_clientIP':str,'trap_clientMAC':str,'trap_type':str,'session_start':datetime.datetime,'session_end':datetime.datetime}) 
+df = pd.read_csv(file_path) 
 #df_BH = df[df.trap_AP.str.startswith('BH')] # get building specific packets
 buildings = ['BH','GH','DB','ACB','LCB','LB','SRB']
 for name in buildings:

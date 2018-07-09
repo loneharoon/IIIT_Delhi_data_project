@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-In this scipt, I first create hash of all MACS ids and then I check for duplicates clients in SNMP logs
+In this scipt, I first create hash of all MACS ids. and combine all sheets. which acts as a directory afterwards.
 Created on Mon Jul  2 11:22:49 2018
 
 @author: haroonr
@@ -49,37 +49,6 @@ gt_final.username = users
 gt_final.to_csv(mac_path + "final_hashed_mac_id.csv",index=False)
 # save all names
 
-
-#%%
-import pandas as pd
-path = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/"
-mac_path = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/mac_ids/"
-bldg = "mac_idwithcount.csv"
-df = pd.read_csv(path + bldg)
-gt =  pd.read_csv(mac_path + "final_hashed_mac_id.csv")
-
-#%%
-from itertools import groupby
-flag = 0
-count_2 = [] # unique clients
-count_3 = []
-for key,value in df.iterrows():
-  if flag == 25:
-    break
-  print(flag)
-  flag = flag +1
-  clients = list(set(eval(value.clientMacs)))# set removes duplicates
-  count_2.append(len(clients)) # unique clients
-  #count = value.count 
-  users = []
-  for cl in clients:
-    try:
-       users.append(gt[gt.hashed_mac == cl].iat[0,2])
-    except:
-       users.append(cl)
-  count_3.append( len(list(set(users))))     
-    
-    
     
 #%%
 mac_path = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/"
@@ -87,18 +56,8 @@ bldg = "3103.xls"
 df = pd.read_excel(mac_path + bldg)    
 df.index = pd.to_datetime(df.Time,yearfirst=True)
 df.columns = ['xy','Time','Temp','Humi']
-
 df2 = pd.read_csv(mac_path + "year2018_VIDP_station_two_months.csv")    
-
 df2.index = pd.to_datetime(df2['date'])
-#%%
- mytemp = gt.iloc[0:5]
- clients =  mytemp.hashed_mac
- users = []
- for i in clients:
-   try:
-     users.append(mytemp[mytemp.hashed_mac == i].iat[0,2]) 
-   except:
-     users.append(i)
+
 
     
