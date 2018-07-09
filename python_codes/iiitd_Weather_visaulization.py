@@ -97,5 +97,5 @@ cat = pd.concat([res[['temperature','humidity']],rr[['Temp','Humi']]],axis=1)
 cat.columns = ['Airport_temperature','Airport_Humidity','IIITD_temperature','IIITD_Humidity']
 cat.interpolate(inplace = True)
 cat_sub = cat['2018-03-01':]
-# writing data
+# writing data3
 cat_sub.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/formatted_iiitd_airport_data_four_months.csv")
