@@ -21,6 +21,8 @@ count_2 = [] # unique clients
 count_3 = []
 for key,value in df.iterrows():
   print(flag)
+  if flag ==5:
+    break
   flag = flag +1
   clients = list(set(eval(value.clientMacs)))# set removes duplicates
   count_2.append(len(clients)) # unique clients
@@ -32,5 +34,23 @@ for key,value in df.iterrows():
        users.append(cl)
   count_3.append( len(list(set(users))))     
 
-updated_count = pd.DataFrame({'count_1':list(df['count'].values),'count_2':count_2,'count_3':count_3})
-updated_count.to_csv("temporary.csv")
+updated_count = pd.DataFrame({'timestamp':df.timestamp,'count_1':list(df['count'].values),'count_2':count_2,'count_3':count_3})#
+#updated_count.to_csv("temporary.csv")
+
+#%% in this script I try to read log file i
+filename = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/snmp2018-07-01.log"
+buffer = []
+with open(filename,'r') as f:
+  for line in f:
+    if 'Date' in line:
+      r = line
+    if 'ciscoLwappDot11ClientMovedToRunState' in line:
+      print (line)
+      count = 0
+      buffer.append(r)
+      for line in f:
+        count = count + 1
+        buffer.append(line)
+        print(line)
+        break
+    

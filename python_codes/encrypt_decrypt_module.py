@@ -51,11 +51,11 @@ gt_final.to_csv(mac_path + "final_hashed_mac_id.csv",index=False)
 
     
 #%%
-mac_path = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/"
 bldg = "3103.xls"
 df = pd.read_excel(mac_path + bldg)    
 df.index = pd.to_datetime(df.Time,yearfirst=True)
 df.columns = ['xy','Time','Temp','Humi']
+#%%
 df2 = pd.read_csv(mac_path + "year2018_VIDP_station_two_months.csv")    
 df2.index = pd.to_datetime(df2['date'])
 
