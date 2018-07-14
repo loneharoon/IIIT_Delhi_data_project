@@ -4,7 +4,7 @@
 In this, script I clean weather data of IIITD and VIDP weather station for the variance analysis.
 Aim is to keep data between 1 - 15 March 2018 of both, align the data and make it ready for ggplot plotting
 Plots weather variables of IIIT Delhi, elitech data logger
-
+::July 2018 update::
 Please read last cells becuase I update code in july 2018 for resubmission  
 
 
@@ -52,7 +52,7 @@ cat.columns = ['Airport_temperature','Airport_Humidity','IIITD_temperature','III
 cat.interpolate(inplace = True)
 cat.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/formatted_iiitd_airport_data.csv")
 #%%
-#% FOLLOWING CODE WAS WRITTEN IN JULY 2018, Mos of this is redundant of abov one
+#% FOLLOWING CODE WAS WRITTEN IN JULY 2018, Most of this is redundant of above one
 wu1 = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/temp_data/year2018_VIDP_station_march_april.csv"
 wu2 = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/temp_data/year2018_VIDP_station_two_months.csv"
 wu3 = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/temp_data/fifth_april.csv"
@@ -71,6 +71,7 @@ df4.index= pd.to_datetime(df4.index)
 
 df_wu = pd.concat([df1,df2,df3,df4],axis=0)
 df_wu = df_wu.sort_index()
+df_wu.index = df_wu.index + datetime.timedelta(minutes = 60*5 + 30) 
 df_wu.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/temp_data/"+ "mytemp.csv")
 # read again 
 wuf = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/temp_data/"+ "mytemp.csv"
@@ -98,4 +99,11 @@ cat.columns = ['Airport_temperature','Airport_Humidity','IIITD_temperature','III
 cat.interpolate(inplace = True)
 cat_sub = cat['2018-03-01':]
 # writing data3
-cat_sub.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Downloads/formatted_iiitd_airport_data_four_months.csv")
+cat_sub.to_csv("/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/weather_comparison")
+#%% compute correlation between temperature of two site and the humdity one
+#
+direc = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/weather_comparison/formatted_iiitd_airport_data_four_months.csv"
+df = pd.read_csv(direc,index_col = "Unnamed: 0")
+df.index = pd.to_datetime(df.index)
+df[['Airport_temperature','IIITD_temperature']].plot()
+df[['Airport_temperature','IIITD_temperature']].corr() # got 0.96
