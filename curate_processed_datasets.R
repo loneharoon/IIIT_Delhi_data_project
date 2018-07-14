@@ -191,7 +191,7 @@ summarise_missing_data_plot_WITH_TRANsformer<- function(){
   temp <- data[data$timestamp <= as.POSIXct("2017-12-31 23:59:59"),]
   temp_xts <- xts(temp[,-1],temp$timestamp)
   #ARRANGE TRANSFORMER DATA##
-  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/data_present_status.csv"
+  transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/data_present_status_transformers.csv"
   df_tran <-  fread(transformer_data)
   df_tran$timestamp <- fasttime::fastPOSIXct(df_tran$timestamp)-19800
   df_tran <- df_tran[df_tran$timestamp <= as.POSIXct("2017-12-31 23:59:59"),]
@@ -646,17 +646,23 @@ plot_power_occupancy_data <- function(){
   plot(data_sampled)
   #ggplot(data,aes(timestamp,power))+ geom_line()
   
-  occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/final_processed_data/ACB.csv"
+  #occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/final_processed_data/ACB.csv"
+  occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/IIITD_occupancy_dataset/ACB.csv"
+  
+  
   
   occu_df <- fread(occupancy_path)
   occu_df$timestamp <- as.POSIXct(occu_df$timestamp,tz="Asia/Kolkata",origin = "1970-01-01")
-  occu_df$timestamp <- occu_df$timestamp + 19800 # adding 5:30 hours
+  occu_df$timestamp <- occu_df$timestamp # + 19800 # adding 5:30 hours
   occu_sub <- occu_df[occu_df$timestamp >= start_date & occu_df$timestamp <= end_date,]
   occu_xts <- xts(occu_sub$occupancy_count, occu_sub$timestamp) 
   occu_sampled <- resample_occupancy_minutely(occu_xts,30)
   plot(occu_sampled)
   
   temp <- cbind(data_sampled,occu_sampled)
+  # cor(coredata(temp[,1]),coredata(temp[,2]))
+  # l = cor.test(coredata(temp[,1]),coredata(temp[,2]))
+  # l$p.value
   temp_df <- fortify(temp)
   colnames(temp_df) <- c("timestamp","power","occupancy")
   p <- ggplot(temp_df,aes(timestamp,power/1000)) + geom_line(aes(colour="Power"))
@@ -684,17 +690,24 @@ plot_power_occupancy_data <- function(){
   plot(data_sampled)
   #ggplot(data,aes(timestamp,power))+ geom_line()
   
-  occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/final_processed_data/GH.csv"
+  #occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/final_processed_data/GH.csv"
+  occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/IIITD_occupancy_dataset/GH.csv"
+  
+  
+  
   
   occu_df <- fread(occupancy_path)
   occu_df$timestamp <- as.POSIXct(occu_df$timestamp,tz="Asia/Kolkata",origin = "1970-01-01")
-  occu_df$timestamp <- occu_df$timestamp + 19800 # adding 5:30 hours
+  occu_df$timestamp <- occu_df$timestamp + 19800 # adding 5:30 hours. please check it is plotting properly
   occu_sub <- occu_df[occu_df$timestamp >= start_date & occu_df$timestamp <= end_date,]
   occu_xts <- xts(occu_sub$occupancy_count, occu_sub$timestamp) 
   occu_sampled <- resample_occupancy_minutely(occu_xts,30)
   plot(occu_sampled)
   
   temp <- cbind(data_sampled,occu_sampled)
+   # cor(coredata(temp[,1]),coredata(temp[,2]))
+   # l = cor.test(coredata(temp[,1]),coredata(temp[,2]))
+   # l$p.value  
   temp_df <- fortify(temp)
   colnames(temp_df) <- c("timestamp","power","occupancy")
   p <- ggplot(temp_df,aes(timestamp,power/1000)) + geom_line(aes(colour="Power"))
