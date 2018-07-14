@@ -199,6 +199,7 @@ summarise_missing_data_plot_WITH_TRANsformer<- function(){
   colnames(df_tran_xts) <- c("Transformer_1","Transformer_2","Transformer_3")
   ########
   temp_xts <- cbind(temp_xts,df_tran_xts)
+  colnames(temp_xts) <- c("Academic","Boys_main","Boys_backup","Facilities","Girls_main",  "Girls_backup","Lecture","Library","Dining","Transformer_1","Transformer_2","Transformer_3")
   
   day_data <- split.xts(temp_xts,f="days",k=1)
   sumry_data <- lapply(day_data, function(x) {
@@ -230,7 +231,7 @@ summarise_missing_data_plot_WITH_TRANsformer<- function(){
   g <- g + annotate("text",x=as.Date("2018-01-05"),y=seq(1.3,12.3,1),label=uptime)
   g <- g + scale_y_continuous(sec.axis = sec_axis(~./1, name = "Uptime (%)"  ))
   g
-  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
+  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/Submitted/IIIT_dataset/figures/")
   # ggsave(filename="data_missing_plot_version_3.pdf",height = 5,width = 10,units = c("in"))
 }
 
@@ -255,15 +256,20 @@ plot_facetted_histograms_of_Data_WITH_TRANsformer<- function(){
   def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
   meter <- "all_buildings_power.csv"
   data <- fread(paste0(def_path,meter)) 
+  data$timestamp <- as.POSIXct(data$timestamp, tz = "Asia/Kolkata", origin = "1970-01-01")
   data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
   df_xts <- xts(data[,-1],data$timestamp)
+  
   #ARRANGE TRANSFORMER DATA##
   transformer_data <-  "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/supply/processed_phase_3/all_transformer_power.csv"
   df_tran <-  fread(transformer_data)
   df_tran_xts <- xts(df_tran[,-1], fasttime::fastPOSIXct(df_tran$timestamp) - 19800)
   colnames(df_tran_xts) <- c("Transformer_1","Transformer_2","Transformer_3")
+
   ########
+  
   df_xts <- cbind(df_xts,df_tran_xts)
+  colnames(df_xts) <- c("Academic","Boys_main","Boys_backup","Facilities","Girls_main",  "Girls_backup","Lecture","Library","Dining","Transformer_1","Transformer_2","Transformer_3")
   df <- data.frame(timestamp=index(df_xts),coredata(df_xts))
   # handle zero readings in Lecture building
   df$Lecture <- ifelse(df$Lecture==0,NA,df$Lecture)
@@ -276,7 +282,7 @@ plot_facetted_histograms_of_Data_WITH_TRANsformer<- function(){
   g <- ggplot(data_long,aes(value)) + geom_histogram(binwidth = 1) + facet_wrap(~Var2 ,scales = "free")
   g <- g + labs(x="Power (kW)", y = "Count") + theme(axis.text = element_text(color = "black"))
   g
-  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/IIIT_dataset/figures/")
+  setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/Submitted/IIIT_dataset/figures/")
   # ggsave(filename="data_histograms_2.pdf",height = 8,width = 12,units = c("in"))
 }
 

@@ -114,3 +114,8 @@ df_new['temp_diff'] =  df['Airport_temperature'] - df['IIITD_temperature']
 df_new['humid_diff'] = df['Airport_Humidity'] - df['IIITD_Humidity']
 keep = ['temp_diff','humid_diff']
 df_new[keep].boxplot()
+#%%
+day_gp = df_new.between_time('8:0','18:0')
+night_gp = df_new[(df_new.index.hour < 8) | (df_new.index.hour > 18)]
+day_gp[keep].boxplot()x
+night_gp[keep].boxplot()

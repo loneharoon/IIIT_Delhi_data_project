@@ -3,6 +3,7 @@
 # 
 library(ggplot2)
 library(xts)
+Sys.setenv(TZ='Asia/Kolkata')
 setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/Submitted/IIIT_dataset/figures/")
 rootdir = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/formatted_iiitd_airport_data.csv"
 df = read.csv(rootdir)
