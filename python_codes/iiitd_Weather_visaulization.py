@@ -107,3 +107,10 @@ df = pd.read_csv(direc,index_col = "Unnamed: 0")
 df.index = pd.to_datetime(df.index)
 df[['Airport_temperature','IIITD_temperature']].plot()
 df[['Airport_temperature','IIITD_temperature']].corr() # got 0.96
+df[['Airport_Humidity','IIITD_Humidity']].corr() # got 0.90
+#%% testing stage
+df_new = df
+df_new['temp_diff'] =  df['Airport_temperature'] - df['IIITD_temperature']
+df_new['humid_diff'] = df['Airport_Humidity'] - df['IIITD_Humidity']
+keep = ['temp_diff','humid_diff']
+df_new[keep].boxplot()
