@@ -8,9 +8,9 @@ Created on Mon Jul  9 20:41:12 2018
 """
 
 import pandas as pd
-path = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/"
+path = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/junejuly2018/"
 mac_path = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/mac_ids/"
-bldg = "mac_idwithcount.csv"
+bldg = "NACB4FAP_data_2018_junejuly.csv"
 df = pd.read_csv(path + bldg)
 gt =  pd.read_csv(mac_path + "final_hashed_mac_id.csv")
 
@@ -21,8 +21,8 @@ count_2 = [] # unique clients
 count_3 = []
 for key,value in df.iterrows():
   print(flag)
-  if flag ==5:
-    break
+  #if flag ==5:
+   # break
   flag = flag +1
   clients = list(set(eval(value.clientMacs)))# set removes duplicates
   count_2.append(len(clients)) # unique clients
@@ -35,7 +35,7 @@ for key,value in df.iterrows():
   count_3.append( len(list(set(users))))     
 
 updated_count = pd.DataFrame({'timestamp':df.timestamp,'count_1':list(df['count'].values),'count_2':count_2,'count_3':count_3})#
-#updated_count.to_csv("temporary.csv")
+#updated_count.to_csv(path+"NACB4FAP_counts.csv")
 
 #%% in this script I try to read log file i
 filename = "/Volumes/MacintoshHD2/Users/haroonr/Downloads/snmp2018-07-01.log"

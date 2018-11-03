@@ -1,3 +1,4 @@
+# seems I have used this script for initial analysis, and does not form a part of final processed datasets
 library(data.table)
 library(xts)
 #girls_hostel_mains.csv, boys_hostel_mains.csv,acad_build_mains,fac_build_mains,lecture_build_mains,

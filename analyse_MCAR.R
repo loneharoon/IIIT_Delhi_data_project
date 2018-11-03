@@ -21,7 +21,7 @@ tt = apply(df3_xts,2,function(temp){
 # now do test
 res = LittleMCAR(tt)
 res$p.value
-# saving data, if in case we neet to work on this data in python.
+# saving data, if in case we need to work on this data in python.
 # Intention was to use https://github.com/RianneSchouten/pymice library  so as to compute p value for each corresponding columns. But doing that results in NaN value for some pairs.
 save_path = "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
 write.csv(tt,paste0(save_path,"data_status_ones_replaced.csv"))

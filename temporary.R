@@ -1,3 +1,6 @@
+plot_power_occupancy_data <- function(){
+#  I use this function to plot power and occupancy of two buildings.
+#  Remember at the time of plotting, the occupancy dataset was 5:30 hours lagging (seems in UTC) so I forced timestamps to correct value.
 library(ggplot2)
 library(data.table)
 library(xts)
@@ -43,9 +46,6 @@ p
 
 
 
-
-
-
 def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
 meter <- "girls_hostel_mains.csv"
 data <- fread(paste0(def_path,meter))
@@ -80,4 +80,5 @@ p <- p + labs(y = "Power (kW)", x = "",colour = "") + scale_x_datetime(breaks=sc
 p <- p + theme(legend.position = c(0.2,0.9),axis.text.x = element_text(color = "black"))
 p <- p + theme(axis.text.y.right=element_text(colour = "blue"),axis.title.y.right=element_text(colour = "blue"),axis.title.y.left = element_text(colour = "red"),axis.text.y.left = element_text(color = "red"))
 p
-ggsave("occu_power_girls_main_1.pdf",height = 2,width = 6,units = c("in"))
+#ggsave("occu_power_girls_main_1.pdf",height = 2,width = 6,units = c("in"))
+}

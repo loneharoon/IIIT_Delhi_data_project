@@ -639,13 +639,14 @@ plot_power_occupancy_data <- function(){
   Sys.setenv(TZ='Asia/Kolkata')
   setwd("/Volumes/MacintoshHD2/Users/haroonr/Dropbox/Writings/Submitted/IIIT_dataset/figures/")
   
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
+  #def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
+  def_path <- "/Volumes/DATA_DSK/Datasets_Macbook/IIIT_dataset/processed_phase_3/"
   meter <- "acad_build_mains.csv"
   data <- fread(paste0(def_path,meter))
   data$timestamp <- as.POSIXct(data$timestamp,tz="Asia/Kolkata",origin = "1970-01-01")
   #data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
-  start_date <- as.POSIXct("2017-04-01")
-  end_date <- as.POSIXct("2017-04-05 23:59:59")
+  start_date <- as.POSIXct("2017-06-11")
+  end_date <- as.POSIXct("2017-06-16 23:59:59")
   data_sub <- data[data$timestamp >= start_date & data$timestamp <= end_date,]
   data_sub_xts <- xts(data_sub$power,data_sub$timestamp)
   data_sampled <- resample_data_minutely(data_sub_xts,30)
@@ -653,8 +654,8 @@ plot_power_occupancy_data <- function(){
   #ggplot(data,aes(timestamp,power))+ geom_line()
   
   #occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/final_processed_data/ACB.csv"
-  occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/IIITD_occupancy_dataset/ACB.csv"
-  
+  #occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/IIITD_occupancy_dataset/ACB.csv"
+  occupancy_path <- "/Volumes/DATA_DSK/Datasets_Macbook/IIIT_occupancy/IIITD_occupancy_dataset/ACB.csv"
   
   
   occu_df <- fread(occupancy_path)
@@ -676,20 +677,21 @@ plot_power_occupancy_data <- function(){
   p <- p + scale_y_continuous(sec.axis = sec_axis(~.*10, name = "Occupancy count"))
   p <- p + scale_colour_manual(values = c("blue", "red")) 
   p <- p + labs(y = "Power (kW)", x = "",colour = "") + scale_x_datetime(breaks=scales::date_breaks("1 day"),labels = scales::date_format("%d-%b"))
-  p <- p + theme(legend.position = c(0.2,0.9),axis.text.x = element_text(color = "black"))
+  p <- p + theme(legend.position = c(0.1,0.9),axis.text.x = element_text(color = "black"))
   p <- p + theme(axis.text.y.right=element_text(colour = "blue"),axis.title.y.right=element_text(colour = "blue"),axis.title.y.left = element_text(colour = "red"),axis.text.y.left = element_text(color = "red"))
   p
-  #ggsave("occu_power_acb_1.pdf",height = 2,width = 6,units = c("in"))
+  ggsave("occu_power_acb_2.pdf",height = 2,width = 6,units = c("in"))
   
   
   
-  def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
+  #def_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_dataset/processed_phase_3/"
+  def_path <- "/Volumes/DATA_DSK/Datasets_Macbook/IIIT_dataset/processed_phase_3/"
   meter <- "girls_hostel_mains.csv"
   data <- fread(paste0(def_path,meter))
   data$timestamp <- as.POSIXct(data$timestamp,tz="Asia/Kolkata",origin = "1970-01-01")
   #data$timestamp <- fasttime::fastPOSIXct(data$timestamp)-19800
-  start_date <- as.POSIXct("2017-04-01")
-  end_date <- as.POSIXct("2017-04-05 23:59:59")
+  start_date <- as.POSIXct("2017-06-11")
+  end_date <- as.POSIXct("2017-06-16 23:59:59")
   data_sub <- data[data$timestamp >= start_date & data$timestamp <= end_date,]
   data_sub_xts <- xts(data_sub$power,data_sub$timestamp)
   data_sampled <- resample_data_minutely(data_sub_xts,30)
@@ -697,11 +699,9 @@ plot_power_occupancy_data <- function(){
   #ggplot(data,aes(timestamp,power))+ geom_line()
   
   #occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/final_processed_data/GH.csv"
-  occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/IIITD_occupancy_dataset/GH.csv"
-  
-  
-  
-  
+  #occupancy_path <- "/Volumes/MacintoshHD2/Users/haroonr/Detailed_datasets/IIIT_occupancy/IIITD_occupancy_dataset/GH.csv"
+  occupancy_path <- "/Volumes/DATA_DSK/Datasets_Macbook/IIIT_occupancy/IIITD_occupancy_dataset/GH.csv"
+
   occu_df <- fread(occupancy_path)
   occu_df$timestamp <- as.POSIXct(occu_df$timestamp,tz="Asia/Kolkata",origin = "1970-01-01")
   occu_df$timestamp <- occu_df$timestamp + 19800 # adding 5:30 hours. please check it is plotting properly

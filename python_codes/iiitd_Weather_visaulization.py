@@ -117,5 +117,5 @@ df_new[keep].boxplot()
 #%%
 day_gp = df_new.between_time('8:0','18:0')
 night_gp = df_new[(df_new.index.hour < 8) | (df_new.index.hour > 18)]
-day_gp[keep].boxplot()x
+day_gp[keep].boxplot()
 night_gp[keep].boxplot()
